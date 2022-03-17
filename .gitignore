@@ -1,2 +1,2 @@
-src/.spotipyoauthcache
+*.spotipyoauthcache
 *.cfg
