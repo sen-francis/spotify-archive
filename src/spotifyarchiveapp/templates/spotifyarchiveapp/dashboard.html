@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static 'spotifyarchiveapp/assets/css/main-style.css' %}">
-    <title>Spotify Archive</title>
+    <title>Dashboard | Spotify Archive</title>
 </head>
 <body>
     <nav class="header">
@@ -15,9 +15,6 @@
         <a class="website-logo">Spotify Archive Logo</a>
     </nav>
     <main class="main">
-        <h1 style="text-align: center;">Create customized playlists.</h1>
-        <h1 style="text-align: center;">Save to your Spotify library.</h1>
-        <h1 style="text-align: center;">Share with your friends.</h1>
         <form action="#" method="post"> 
             {% csrf_token %}
             <input class="get-started" type="submit" value="GET STARTED" />
