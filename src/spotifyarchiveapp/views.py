@@ -29,6 +29,7 @@ def home(request):
     return render(request, 'spotifyarchiveapp/home.html')
 
 def dashboard(request):
+    code = request.GET['code']
     token_info = sp_oauth.get_access_token(code)
     access_token = token_info['access_token']
     sp = spotipy.Spotify(access_token)
@@ -36,5 +37,5 @@ def dashboard(request):
     #args = {}
     #args["display_name"] = user["display_name"]
     #args["avi_url"] = user["images"]["url"] 
-    return render(request, 'spotifyarchiveapp/dashboard.html',user)
+    return render(request, 'spotifyarchiveapp/dashboard.html', user)
 
