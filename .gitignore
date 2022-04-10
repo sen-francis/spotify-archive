@@ -1,2 +1,6 @@
+#Python Cache Files
+*.pyc
+#Spotify Cache
 *.spotipyoauthcache
+#Config Files
 *.cfg
