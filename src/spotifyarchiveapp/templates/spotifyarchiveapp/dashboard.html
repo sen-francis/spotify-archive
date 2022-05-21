@@ -8,17 +8,14 @@
 </head>
 <body>
     <nav class="header">
-        <form action="#" method="post">
-            {% csrf_token %}
-            <input class="log-in" type="submit" value="LOG IN" />
-        </form>
+        <div id="display-user">
+            <img id="display-img" src="{{images.0.url}}">
+            <p id="display-name">{{display_name}}</p>
+        </div>
         <a class="website-logo">Spotify Archive Logo</a>
     </nav>
     <main class="main">
-        <form action="#" method="post"> 
-            {% csrf_token %}
-            <img  src="{{images.0.url}}" height="300" width="300">
-        </form>
+
     </main>
     <footer class="footer">
         <a id="github-logo" href="https://github.com/sen-francis/spotify-archive">
