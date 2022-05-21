@@ -7,13 +7,17 @@
     <title>Dashboard | Spotify Archive</title>
 </head>
 <body>
-    <nav class="header">
-        <div id="display-user">
+    <div class="header">
+        <div id="display-user" class="button" onclick="dropdown()">
             <img id="display-img" src="{{images.0.url}}">
             <p id="display-name">{{display_name}}</p>
+            <p id="drop-arrow">&#9660</p>
         </div>
         <a class="website-logo">Spotify Archive Logo</a>
-    </nav>
+        <div id="drop-content">
+            <a href="#">Log Out</a>
+        </div>
+    </div>
     <main class="main">
 
     </main>
@@ -22,5 +26,18 @@
             <img id="light-logo" src="{% static 'spotifyarchiveapp/assets/images/GitHub-Mark-Light-32px.png' %}">
         </a>
     </footer>
+    <script>
+        function dropdown(){
+            //if menu already open
+            if(document.getElementById("drop-arrow").textContent=="\u25B2"){
+                document.getElementById("drop-arrow").innerHTML = "&#9660";
+                document. getElementById("drop-content").style.display = "none";
+            }
+            else{
+                document.getElementById("drop-arrow").innerHTML = "&#9650";
+                document. getElementById("drop-content").style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
