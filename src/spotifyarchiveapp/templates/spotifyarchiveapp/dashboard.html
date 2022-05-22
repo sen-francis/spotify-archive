@@ -9,7 +9,7 @@
 <body>
     <div class="header">
         <div id="display-user" class="button" onclick="dropdown()">
-            <img id="display-img" src="{{images.0.url}}">
+            <img id="display-img" src="{{avi_url}}">
             <p id="display-name">{{display_name}}</p>
             <p id="drop-arrow">&#9660</p>
         </div>
@@ -18,14 +18,23 @@
             <a href="#">Log Out</a>
         </div>
     </div>
-    <main class="main">
-
-    </main>
-    <footer class="footer">
+    <div class="main">
+        <h1 style="text-align: center;">Get started by searching songs below!</h1>
+        <form name="searchForm" method="GET" action="#">
+            {% csrf_token %}
+            <input type="text" name="search" placeholder="Search..">
+        </form>
+        {% if results %}
+            {% for track in results.tracks.items %} 
+                <p>{{track.name}}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="footer">
         <a id="github-logo" href="https://github.com/sen-francis/spotify-archive">
             <img id="light-logo" src="{% static 'spotifyarchiveapp/assets/images/GitHub-Mark-Light-32px.png' %}">
         </a>
-    </footer>
+    </div>
     <script>
         function dropdown(){
             //if menu already open
