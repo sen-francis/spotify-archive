@@ -33,12 +33,13 @@ h1{
 .main{
     display:flex; 
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    justify-content: left;
     background-color: #101010;
     font-size: medium;
     color: white;
     height: 75%;
+    gap: 10px;
+    width: 100%;
 }
 
 .footer{
@@ -154,4 +155,62 @@ h1{
 
 #drop-content a:hover {
     background-color: #403c3c;
+}
+
+.track-list{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    width: 50%;
+    overflow: auto;
+    gap: 10px;
+}
+
+.track {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.track-img {
+    width: 50px;
+    height:50px;
+}
+
+.track-title{
+    display: flex;
+    flex-direction: column;
+}
+
+.track-artists{
+    display: flex;
+    flex-direction: row;
+}
+
+.track-displays{
+    display: flex;
+    flex-direction: row;
+    overflow: auto;
+    width: 100%;
+    margin-left: 10px;
+}
+
+#selection-header{
+    position:absolute;
+    right: 34.4%;
+    font-size: xx-large;
+    margin: 10px;
+}
+
+#search-bar{
+    border: none;
+    background-color: #101010;
+    color: white;
+    outline: none;
+    font-family: Gotham;
+    font-weight: bold;
+    font-size: xx-large;
+    margin: 10px;
+    width: 48%;
 }

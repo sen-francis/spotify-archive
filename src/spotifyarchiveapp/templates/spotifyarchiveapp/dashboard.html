@@ -19,16 +19,55 @@
         </div>
     </div>
     <div class="main">
-        <h1 style="text-align: center;">Get started by searching songs below!</h1>
         <form name="searchForm" method="GET" action="#">
             {% csrf_token %}
-            <input type="text" name="search" placeholder="Search..">
+            <input type="text" name="search" id="search-bar" placeholder="Search for songs">
         </form>
-        {% if results %}
-            {% for track in results.tracks.items %} 
-                <p>{{track.name}}</p>
-            {% endfor %}
-        {% endif %}
+        <h2 id="selection-header"> Current Selection </h2>
+        <div class="track-displays">
+            <div class ="track-list">
+                {% if results %}
+                    {% for track in results.tracks.items %}
+                        <div class ="track">
+                            <img class="track-img" src="{{track.album.images.0.url}}">
+                            <div class="track-title">
+                                <p>{{track.name}}</p>
+                                <div class="track-artists">
+                                    {% for artist in track.artists %}
+                                        {% if forloop.last %}
+                                            <p>{{artist.name}}</p>
+                                        {% else %}
+                                            <p>{{artist.name}},&nbsp;</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class ="track-list">
+                {% if results %}
+                    {% for track in results.tracks.items %}
+                        <div class ="track">
+                            <img class="track-img" src="{{track.album.images.0.url}}">
+                            <div class="track-title">
+                                <p>{{track.name}}</p>
+                                <div class="track-artists">
+                                    {% for artist in track.artists %}
+                                        {% if forloop.last %}
+                                            <p>{{artist.name}}</p>
+                                        {% else %}
+                                            <p>{{artist.name}},&nbsp;</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
     </div>
     <div class="footer">
         <a id="github-logo" href="https://github.com/sen-francis/spotify-archive">
