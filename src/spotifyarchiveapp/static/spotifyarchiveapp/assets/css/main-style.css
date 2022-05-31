@@ -1,5 +1,5 @@
 @font-face { font-family: Gotham; font-weight: bold; src: url('../fonts/Gotham-Bold.otf');}
-@font-face { font-family: Gotham; font-weight: medium; src: url('../fonts/Gotham-Medium.ttf');}
+@font-face { font-family: Gotham; font-weight: normal; src: url('../fonts/Gotham-Medium.ttf');}
 * {
     margin: 0;
     padding: 0;
@@ -60,6 +60,8 @@ h1{
     text-align: center;
     text-decoration: none;
     font-family:inherit;
+    font-weight: bold;
+    font-size: medium;
     transition-duration: 0.4s;
     width: 10%;
     height: 7%;
@@ -151,10 +153,6 @@ h1{
     text-decoration: none;
     display: block;
     padding: 6px;
-  }
-
-#drop-content a:hover {
-    background-color: #403c3c;
 }
 
 .track-list{
@@ -164,13 +162,27 @@ h1{
     width: 50%;
     overflow: auto;
     gap: 10px;
+    margin-left: 10px;
 }
 
 .track {
     display: flex;
     flex-direction: row;
     gap: 10px;
-    align-items: center;
+    text-decoration: none;
+    font-family:inherit;
+    font-size: medium;
+    font-weight: bold;
+    color: white;
+    background-color: #101010;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.track:hover {
+    background-color: #403c3c;   
+    text-decoration: none;
 }
 
 .track-img {
@@ -181,6 +193,7 @@ h1{
 .track-title{
     display: flex;
     flex-direction: column;
+    text-align: left;
 }
 
 .track-artists{
@@ -193,7 +206,7 @@ h1{
     flex-direction: row;
     overflow: auto;
     width: 100%;
-    margin-left: 10px;
+    margin-left: 0px;
 }
 
 #selection-header{
@@ -201,6 +214,7 @@ h1{
     right: 34.4%;
     font-size: xx-large;
     margin: 10px;
+    
 }
 
 #search-bar{
@@ -213,4 +227,66 @@ h1{
     font-size: xx-large;
     margin: 10px;
     width: 48%;
+}
+
+#logout{
+    text-decoration: none;
+    font-family: inherit;
+    font-size: medium;
+    font-weight: normal;
+    text-align: left;
+    color: white;
+    background-color: #1f1f1f;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    display: block;
+    padding: 6px;
+}
+
+#logout:hover {
+    background-color: #403c3c;
+}
+
+.submit{
+    text-decoration: none;
+    font-family: inherit;
+    font-size: large;
+    font-weight: normal;
+    text-align: left;
+    color: white;
+    background-color: green;
+    border: none;
+    cursor: pointer;
+    display: block;
+    padding: 6px;
+    position:fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 999px;
+}
+
+#results{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    width: 75%;
+    overflow: auto;
+    margin-left: 10px;
+}
+
+.play-buttons{
+    text-decoration: none;
+    font-family: inherit;
+    font-size: large;
+    font-weight: normal;
+    text-align: left;
+    color: white;
+    background-color: green;
+    border: none;
+    cursor: pointer;
+    display: block;
+    padding: 6px;
+    border-radius: 999px;
+    margin: 10px;
 }
