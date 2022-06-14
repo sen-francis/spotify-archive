@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'spotifyarchiveapp/assets/css/main-style.css' %}">
+    <title>Spotify Archive</title>
+</head>
+<body>
+    <div class="header">
+        <div id="display-user" class="button" onclick="dropdown()">
+            <img id="display-img" src="{{avi_url}}">
+            <p id="display-name">{{display_name}}</p>
+            <p id="drop-arrow">&#9660</p>
+        </div>
+        <a class="website-logo">Spotify Archive Logo</a>
+        <div id="drop-content">
+            <form name="logoutForm" method="POST" action="#">
+                {% csrf_token %}
+                <input type="submit" name="logout" id="logout" value="Log out">
+            </form>
+        </div>
+    </div>
+    <main class="main">
+        <h1 style="text-align: center;">Succesfully created a playlist just for you!</h1>
+        <h2 style="text-align: center;">Check your Spotify library to listen to your new playlist!</h2>
+        <form name="createAnotherForm" action="#" method="post"> 
+            {% csrf_token %}
+            <input class="get-started" type="submit" name="create-another" value="Create Another" />
+        </form>
+    </main>
+    <footer class="footer">
+        <a id="github-logo" href="https://github.com/sen-francis/spotify-archive">
+            <img id="light-logo" src="{% static 'spotifyarchiveapp/assets/images/GitHub-Mark-Light-32px.png' %}">
+        </a>
+    </footer>
+</body>
+</html>

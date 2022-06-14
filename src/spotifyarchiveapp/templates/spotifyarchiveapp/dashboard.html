@@ -15,7 +15,7 @@
         </div>
         <a class="website-logo">Spotify Archive Logo</a>
         <div id="drop-content">
-            <form name=logoutForm" method="POST" action="#">
+            <form name="logoutForm" method="POST" action="#">
                 {% csrf_token %}
                 <input type="submit" name="logout" id="logout" value="Log out">
             </form>
@@ -56,7 +56,10 @@
             <div class ="track-list">
                 {% if selected %}
                     {% for track in selected %}
-                        <div class ="track">
+                    <form id="deselectForm" method="POST" action="#">
+                        {% csrf_token %}
+                        <button class ="track" name="trackDeselect" type="submit">
+                            <input type="hidden" name="trackDeselectID" id="trackDeselectID" value="{{track.id}}">
                             <img class="track-img" src="{{track.album.images.0.url}}">
                             <div class="track-title">
                                 <p>{{track.name}}</p>
@@ -70,11 +73,15 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                        </div>
+                        </button>
+                    </form>
                     {% endfor %}
                 {% endif %}
             </div>
         </div>
+        {% if error %}
+            <p id="error-msg"> Please select at least one song before continuing.</p>
+        {% endif %}
         <form id="submitForm" method="POST" action="#">
             {% csrf_token %}
             <input class ="submit" name="submitButton" type="submit" value="Create Playlist">

@@ -15,7 +15,7 @@
         </div>
         <a class="website-logo">Spotify Archive Logo</a>
         <div id="drop-content">
-            <form name=logoutForm" method="POST" action="#">
+            <form name="logoutForm" method="POST" action="#">
                 {% csrf_token %}
                 <input type="submit" name="logout" id="logout" value="Log out">
             </form>
@@ -51,11 +51,15 @@
             <form id="reSeedForm" method="POST" action="#">
                 {% csrf_token %}
                 <input class ="play-buttons" name="reSeedButton" type="submit" value="Re-seed Playlist">
-            </form>   
+            </form>
+            <form id="editForm" method="POST" action="#">
+                {% csrf_token %}
+                <input class ="play-buttons" name="editButton" type="submit" value="Edit Playlist">
+            </form>       
             <form id="createForm" method="POST" action="#">
                 {% csrf_token %}
                 <input class ="play-buttons" name="createButton" type="submit" value="Create Playlist">
-            </form>   
+            </form> 
         </div>
     </div>
     <div class="footer">

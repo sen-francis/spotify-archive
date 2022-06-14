@@ -13,7 +13,7 @@ SPOTIPY_CLIENT_ID = config.get('SPOTIFY', 'CLIENT_ID')
 SPOTIPY_CLIENT_SECRET = config.get('SPOTIFY', 'CLIENT_SECRET')
 
 SPOTIPY_REDIRECT_URI = 'http://localhost:8000/dashboard/'
-SCOPE = 'user-library-read'
+SCOPE = 'user-read-private playlist-modify-private'
 CACHE = '.spotipyoauthcache'
 
 sp_oauth = oauth2.SpotifyOAuth(
@@ -34,26 +34,26 @@ def home(request):
     return render(request, 'spotifyarchiveapp/home.html')
 
 def dashboard(request):
+    args = {}
     if(request.GET.get('code')):
         token = sp_oauth.get_access_token(request.GET.get('code'))
     if('logout' in request.POST):
-        os.remove('.spotipyoauthcache')
-        try:
-            del request.session['selected-tracks']
-        except KeyError:
-            pass
-        return render(request, 'spotifyarchiveapp/home.html')
+        return logout(request)
     if('submitButton' in request.POST):
-        return redirect(playlist)
+        if len(request.session['selected-tracks']) == 0: 
+            args["error"]= True
+        else:
+            return redirect(playlist)
     user = sp.current_user()
-    args = {}
     args["display_name"] = user["display_name"]
     args["avi_url"] = user["images"][0]["url"] 
     query = request.GET.get('search')
     if(query):
-        results = sp.search(q=query, limit=10, type='track')
+        results = sp.search(q=query, limit=10, type='track,artist')
+        for key,val in results.items():
+            print(key)
         args["results"]=results
-    #if(request.method == 'POST'):
+    #if(request.method == 'POST')
     if('trackSelect' in request.POST):
         trackID = request.POST.get("track-id")
         track = sp.track(track_id=trackID)
@@ -65,21 +65,27 @@ def dashboard(request):
         else:
             request.session['selected-tracks'] = [track]
         request.session.modified = True
+    if('trackDeselect' in request.POST):
+        trackID = request.POST.get("trackDeselectID")
+        track = sp.track(track_id=trackID)
+        request.session['selected-tracks'].remove(track)
+        request.session.modified = True
     if('selected-tracks' in request.session):
         args["selected"]= request.session['selected-tracks']
     return render(request, 'spotifyarchiveapp/dashboard.html', args)
 
 def playlist(request):
-    print('HERE')
     if('logout' in request.POST):
-        os.remove('.spotipyoauthcache')
-        try:
-            del request.session['selected-tracks']
-        except KeyError:
-            pass
-        return render(request, 'spotifyarchiveapp/home.html')
-    #if('createButton' in request.POST):
-        #create playlist
+        del request.session['playlist-tracks']
+        del request.session['selected-tracks']
+    if('editButton' in request.POST):
+        return redirect(dashboard)
+    if('createButton' in request.POST):
+        playlist = sp.user_playlist_create(sp.current_user()["id"], "Spotify Archive Playlist", public=False, collaborative=False, description='Playlist created using Spotify Archive.')
+        sp.user_playlist_add_tracks(sp.current_user()["id"], playlist["id"], request.session['playlist-tracks'], position=None)
+        del request.session['playlist-tracks']
+        del request.session['selected-tracks']
+        return redirect(success)
     user = sp.current_user()
     args = {}
     args["display_name"] = user["display_name"]
@@ -87,6 +93,29 @@ def playlist(request):
     tracks = []
     for track in request.session['selected-tracks']:
         tracks.append(track["id"])
-    recs = sp.recommendations(seed_tracks=tracks, limit=100)
+    recs = sp.recommendations(seed_tracks=tracks, limit=100, market=user["country"])
+    request.session['playlist-tracks'] = []
+    for track in recs['tracks']:
+        request.session['playlist-tracks'].append(track['id'])
+    request.session.modified = True
     args["results"] = recs['tracks']
     return render(request, 'spotifyarchiveapp/playlist.html', args)
+
+def success(request):
+    if('logout' in request.POST):
+        return logout(request)
+    if('create-another' in request.POST):
+        return redirect(dashboard)
+    user = sp.current_user()
+    args = {}
+    args["display_name"] = user["display_name"]
+    args["avi_url"] = user["images"][0]["url"]
+    return render(request, 'spotifyarchiveapp/success.html', args)
+
+def logout(request):
+    os.remove('.spotipyoauthcache')
+    try:
+        del request.session['selected-tracks']
+    except KeyError:
+        pass
+    return redirect(home)

@@ -273,6 +273,7 @@ h1{
     width: 75%;
     overflow: auto;
     margin-left: 10px;
+    gap: 10px;
 }
 
 .play-buttons{
@@ -289,4 +290,8 @@ h1{
     padding: 6px;
     border-radius: 999px;
     margin: 10px;
+}
+
+#error-msg{
+    color: red;
 }
