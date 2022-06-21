@@ -21,14 +21,16 @@
             </form>
         </div>
     </div>
-    <div class="main">
-        <form name="searchForm" method="GET" action="#">
-            {% csrf_token %}
-            <input type="text" name="search" id="search-bar" placeholder="Search for songs">
-        </form>
-        <h2 id="selection-header"> Current Selection </h2>
-        <div class="track-displays">
-            <div class ="track-list">
+    <div class="main2">
+        <div id="filters">
+            <p> FLITERS</p>
+        </div>   
+        <div class="search-selection">
+            <form id="searchForm" name="searchForm" method="GET" action="#">
+                {% csrf_token %}
+                <input type="text" name="search" id="search-bar" placeholder="Search for songs" oninput="searchDebounce()">
+            </form>
+            <div class ="track-list" id="search-tracklist">
                 {% if results %}
                     {% for track in results.tracks.items %}
                     <form id="selectForm" method="POST" action="#">
@@ -53,45 +55,52 @@
                     {% endfor %}
                 {% endif %}
             </div>
-            <div class ="track-list">
-                {% if selected %}
-                    {% for track in selected %}
-                    <form id="deselectForm" method="POST" action="#">
-                        {% csrf_token %}
-                        <button class ="track" name="trackDeselect" type="submit">
-                            <input type="hidden" name="trackDeselectID" id="trackDeselectID" value="{{track.id}}">
-                            <img class="track-img" src="{{track.album.images.0.url}}">
-                            <div class="track-title">
-                                <p>{{track.name}}</p>
-                                <div class="track-artists">
-                                    {% for artist in track.artists %}
-                                        {% if forloop.last %}
-                                            <p>{{artist.name}}</p>
-                                        {% else %}
-                                            <p>{{artist.name}},&nbsp;</p>
-                                        {% endif %}
-                                    {% endfor %}
+            {% if selected %}
+                <h2 id="selection-header"> Current Selection </h2>
+                <div class ="track-list">
+                        {% for track in selected %}
+                        <form id="deselectForm" method="POST" action="#">
+                            {% csrf_token %}
+                            <button class ="track" name="trackDeselect" type="submit">
+                                <input type="hidden" name="trackDeselectID" id="trackDeselectID" value="{{track.id}}">
+                                <img class="track-img" src="{{track.album.images.0.url}}">
+                                <div class="track-title">
+                                    <p>{{track.name}}</p>
+                                    <div class="track-artists">
+                                        {% for artist in track.artists %}
+                                            {% if forloop.last %}
+                                                <p>{{artist.name}}</p>
+                                            {% else %}
+                                                <p>{{artist.name}},&nbsp;</p>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                            </div>
-                        </button>
-                    </form>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
-        {% if error %}
+                            </button>
+                        </form>
+                        {% endfor %}
+                </div>
+            {% endif %}
+            {% if error %}
             <p id="error-msg"> Please select at least one song before continuing.</p>
-        {% endif %}
-        <form id="submitForm" method="POST" action="#">
-            {% csrf_token %}
-            <input class ="submit" name="submitButton" type="submit" value="Create Playlist">
-        </form>        
+            {% endif %}
+            <form id="submitForm" method="POST" action="#">
+                {% csrf_token %}
+                <input class ="submit" name="submitButton" type="submit" value="Create Playlist">
+            </form>    
+        </div>
+        <div class="search-selection">
+            <h2 id="selection-header"> Generated Playlist </h2>
+            {% if results %}
+            {% endif %}
+        </div>    
     </div>
     <div class="footer">
         <a id="github-logo" href="https://github.com/sen-francis/spotify-archive">
             <img id="light-logo" src="{% static 'spotifyarchiveapp/assets/images/GitHub-Mark-Light-32px.png' %}">
         </a>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="crossorigin="anonymous"></script>
     <script>
         function dropdown(){
             //if menu already open
@@ -103,6 +112,93 @@
                 document.getElementById("drop-arrow").innerHTML = "&#9650";
                 document. getElementById("drop-content").style.display = "block";
             }
+        }
+
+        function searchDebounce(){
+            let timeout = null;
+            timeout = setTimeout(function () {
+                var query = document.getElementById("search-bar").value;
+                $.ajax({
+                    method: "GET",
+                    url: "{% url 'dashboard' %}",
+                    data: {"search": query},
+                    success: function(data) {
+                        document.getElementById("search-tracklist").innerHTML = "";
+                        if(query == ""){
+                            return;
+                        }
+                        for (track of data.results.tracks.items){
+                            let trackButton = document.createElement("button");
+                            trackButton.classList.add("track");
+                            trackButton.name = "trackSelect";
+                            trackButton.type = "submit";
+                            console.log(track["name"]);
+                            trackButton.onclick = function(){ trackSelect(this) };
+
+                            let hiddenTrackID = document.createElement("input");
+                            hiddenTrackID.type = "hidden";
+                            hiddenTrackID.name = "track-id";
+                            hiddenTrackID.id = "track-id";
+                            hiddenTrackID.value = track["id"];
+                            trackButton.appendChild(hiddenTrackID);
+                            
+                            let trackIMG = document.createElement("img");
+                            trackIMG.classList.add("track-img");
+                            trackIMG.src = track["album"]["images"][0]["url"];
+                            trackButton.appendChild(trackIMG);
+
+                            let trackTitle = document.createElement("div");
+                            trackTitle.classList.add("track-title");
+                            trackButton.appendChild(trackTitle);
+
+                            let trackName = document.createElement("p");
+                            trackName.appendChild(document.createTextNode(track["name"]));
+                            trackTitle.appendChild(trackName);
+
+                            let trackArtists = document.createElement("div");
+                            trackArtists.classList.add("track-artists");
+                            trackTitle.appendChild(trackArtists);
+
+                            var i = 0;
+                            for (artist of track["artists"]){
+                                if(i==track["artists"].length-1){
+                                    let trackArtist = document.createElement("p");
+                                    trackArtist.appendChild(document.createTextNode(artist["name"]));
+                                    trackArtists.appendChild(trackArtist);
+                                }
+                                else{
+                                    let trackArtist = document.createElement("p");
+                                    trackArtist.appendChild(document.createTextNode(artist["name"]+",\u00A0"));
+                                    trackArtists.appendChild(trackArtist);
+                                }
+                                i++;
+                            }
+
+                            document.getElementById("search-tracklist").appendChild(trackButton);
+                        }
+                    },
+                    error: function(error){
+                        console.log(error);
+                        console.log("error");
+                    }
+                    });
+            }, 500);
+        }
+
+        function trackSelect(element){
+            let selectedTrackID = element.firstChild.value;
+            console.log(selectedTrackID);
+            /*$.ajax({
+                method: "POST",
+                url: "{% url 'dashboard' %}",
+                data: {"selectedTrackID": selectedTrackID},
+                success: function(data) {
+                },
+                error: function(error){
+                    console.log(error);
+                    console.log("error");
+                }
+            });*/
         }
     </script>
 </body>

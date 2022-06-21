@@ -1,7 +1,7 @@
 from audioop import reverse
 import configparser
 from django.shortcuts import render, HttpResponseRedirect, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import spotipy
 import spotipy.util as util
 from spotipy import oauth2
@@ -47,13 +47,14 @@ def dashboard(request):
     user = sp.current_user()
     args["display_name"] = user["display_name"]
     args["avi_url"] = user["images"][0]["url"] 
-    query = request.GET.get('search')
-    if(query):
-        results = sp.search(q=query, limit=10, type='track,artist')
-        for key,val in results.items():
-            print(key)
-        args["results"]=results
-    #if(request.method == 'POST')
+    print(request)
+    if(request.headers.get('X-Requested-With') == 'XMLHttpRequest' and request.GET['search'] is not None):
+        query = request.GET.get('search', None)
+        if(query):
+            results = sp.search(q=query, limit=10, type='track,artist')
+            return JsonResponse({'results':results})
+        else:
+            return JsonResponse({'results': []})
     if('trackSelect' in request.POST):
         trackID = request.POST.get("track-id")
         track = sp.track(track_id=trackID)
