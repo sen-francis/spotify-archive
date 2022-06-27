@@ -24,18 +24,17 @@
     <div class="main2">
         <div id="filters">
             <p> FLITERS</p>
+            <input type="range" min="1" max="100" value="50" class="slider" id="myRange">
         </div>   
         <div class="search-selection">
             <form id="searchForm" name="searchForm" method="GET" action="#">
                 {% csrf_token %}
-                <input type="text" name="search" id="search-bar" placeholder="Search for songs" oninput="searchDebounce()">
+                <input type="text" name="search" id="search-bar" placeholder="Search for songs" onkeyup="searchDebounce()">
             </form>
             <div class ="track-list" id="search-tracklist">
                 {% if results %}
                     {% for track in results.tracks.items %}
-                    <form id="selectForm" method="POST" action="#">
-                        {% csrf_token %}
-                        <button class ="track" name="trackSelect" type="submit">
+                        <button class ="track" type="submit">
                             <input type="hidden" name="track-id" id="track-id" value="{{track.id}}">
                             <img class="track-img" src="{{track.album.images.0.url}}">
                             <div class="track-title">
@@ -51,17 +50,14 @@
                                 </div>
                             </div>
                         </button>
-                    </form>
                     {% endfor %}
                 {% endif %}
             </div>
-            {% if selected %}
                 <h2 id="selection-header"> Current Selection </h2>
-                <div class ="track-list">
+                <div class ="track-list" id="selected-tracklist">
+                    {% if selected %}
                         {% for track in selected %}
-                        <form id="deselectForm" method="POST" action="#">
-                            {% csrf_token %}
-                            <button class ="track" name="trackDeselect" type="submit">
+                            <button class ="track" type="submit" onclick="trackDeselect(this)">
                                 <input type="hidden" name="trackDeselectID" id="trackDeselectID" value="{{track.id}}">
                                 <img class="track-img" src="{{track.album.images.0.url}}">
                                 <div class="track-title">
@@ -77,22 +73,41 @@
                                     </div>
                                 </div>
                             </button>
-                        </form>
                         {% endfor %}
+                    {% endif %}
                 </div>
-            {% endif %}
-            {% if error %}
-            <p id="error-msg"> Please select at least one song before continuing.</p>
-            {% endif %}
-            <form id="submitForm" method="POST" action="#">
-                {% csrf_token %}
-                <input class ="submit" name="submitButton" type="submit" value="Create Playlist">
-            </form>    
         </div>
         <div class="search-selection">
             <h2 id="selection-header"> Generated Playlist </h2>
-            {% if results %}
-            {% endif %}
+            <div class ="gen-track-list" id="playlist-tracklist">
+                {% if playlist %}
+                    {% for track in playlist %}
+                        <button class ="track" type="submit">
+                            <input type="hidden" id="trackID" value="{{track.id}}">
+                            <img class="track-img" src="{{track.album.images.0.url}}">
+                            <div class="track-title">
+                                <p>{{track.name}}</p>
+                                <div class="track-artists">
+                                    {% for artist in track.artists %}
+                                        {% if forloop.last %}
+                                            <p>{{artist.name}}</p>
+                                        {% else %}
+                                            <p>{{artist.name}},&nbsp;</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </button>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div id="playlist-buttons">
+                <form id="submitForm" method="POST" action="#">
+                    {% csrf_token %}
+                    <input class = "submit" name="submitButton" type="submit" value="Create Playlist">
+                </form>
+                <input class = "submit" name="reSeedButton" type="submit" value="Re-seed Playlist">
+            </div>    
         </div>    
     </div>
     <div class="footer">
@@ -115,90 +130,145 @@
         }
 
         function searchDebounce(){
-            let timeout = null;
-            timeout = setTimeout(function () {
-                var query = document.getElementById("search-bar").value;
-                $.ajax({
-                    method: "GET",
-                    url: "{% url 'dashboard' %}",
-                    data: {"search": query},
-                    success: function(data) {
-                        document.getElementById("search-tracklist").innerHTML = "";
-                        if(query == ""){
-                            return;
-                        }
-                        for (track of data.results.tracks.items){
-                            let trackButton = document.createElement("button");
-                            trackButton.classList.add("track");
-                            trackButton.name = "trackSelect";
-                            trackButton.type = "submit";
-                            console.log(track["name"]);
-                            trackButton.onclick = function(){ trackSelect(this) };
-
-                            let hiddenTrackID = document.createElement("input");
-                            hiddenTrackID.type = "hidden";
-                            hiddenTrackID.name = "track-id";
-                            hiddenTrackID.id = "track-id";
-                            hiddenTrackID.value = track["id"];
-                            trackButton.appendChild(hiddenTrackID);
-                            
-                            let trackIMG = document.createElement("img");
-                            trackIMG.classList.add("track-img");
-                            trackIMG.src = track["album"]["images"][0]["url"];
-                            trackButton.appendChild(trackIMG);
-
-                            let trackTitle = document.createElement("div");
-                            trackTitle.classList.add("track-title");
-                            trackButton.appendChild(trackTitle);
-
-                            let trackName = document.createElement("p");
-                            trackName.appendChild(document.createTextNode(track["name"]));
-                            trackTitle.appendChild(trackName);
-
-                            let trackArtists = document.createElement("div");
-                            trackArtists.classList.add("track-artists");
-                            trackTitle.appendChild(trackArtists);
-
-                            var i = 0;
-                            for (artist of track["artists"]){
-                                if(i==track["artists"].length-1){
-                                    let trackArtist = document.createElement("p");
-                                    trackArtist.appendChild(document.createTextNode(artist["name"]));
-                                    trackArtists.appendChild(trackArtist);
-                                }
-                                else{
-                                    let trackArtist = document.createElement("p");
-                                    trackArtist.appendChild(document.createTextNode(artist["name"]+",\u00A0"));
-                                    trackArtists.appendChild(trackArtist);
-                                }
-                                i++;
-                            }
-
-                            document.getElementById("search-tracklist").appendChild(trackButton);
-                        }
-                    },
-                    error: function(error){
-                        console.log(error);
-                        console.log("error");
-                    }
-                    });
-            }, 500);
-        }
-
-        function trackSelect(element){
-            let selectedTrackID = element.firstChild.value;
-            console.log(selectedTrackID);
-            /*$.ajax({
-                method: "POST",
+            var query = document.getElementById("search-bar").value;
+            $.ajax({
+                method: "GET",
                 url: "{% url 'dashboard' %}",
-                data: {"selectedTrackID": selectedTrackID},
+                data: 
+                    {
+                        "search": query,
+                        "action": "search"
+                    },
                 success: function(data) {
+                    document.getElementById("search-tracklist").innerHTML = "";
+                    if(query == ""){
+                        return;
+                    }
+                    for (track of data.results.tracks.items){
+                        trackCreate(track, "searchTrack");
+                    }
                 },
                 error: function(error){
                     console.log(error);
                     console.log("error");
                 }
-            });*/
+                });
+        }
+
+        function trackSelect(element){
+            let selectedTrackID = element.firstChild.value;
+            $.ajax({
+                method: "GET",
+                url: "{% url 'dashboard' %}",
+                data: {"selectedTrackID": selectedTrackID,
+                        "action": "track-select"
+                },
+                success: function(data) {
+                    track = data.track
+                    if(!track){
+                        return;
+                    }
+                    trackCreate(track, "selectTrack");
+                    playlistModify(data);
+                },
+                error: function(error){
+                    console.log(error); 
+                    console.log("error");
+                }
+            });
+        }
+
+        function trackDeselect(element){
+            //ERROR: THIS ISNT GRABBING TRACK ID
+            let trackID = element.firstElementChild.value;
+            $.ajax({
+                method: "POST",
+                url: "{% url 'dashboard' %}",
+                data: {"trackDeselectID": trackID,
+                        "action": "track-deselect",
+                        "csrfmiddlewaretoken": "{{ csrf_token }}"
+                },
+                success: function(data) {
+                    document.getElementById("selected-tracklist").removeChild(element);
+                    playlistModify(data);
+                },
+                error: function(error){
+                    console.log(error);
+                    console.log("error");
+                }
+            });
+        }
+
+        function trackCreate(track, trackType){
+            let trackButton = document.createElement("button");
+            trackButton.classList.add("track");
+            trackButton.name = "trackSelect";
+            trackButton.type = "submit";
+            if(trackType=="selectTrack"){
+                trackButton.onclick = function(){ trackDeselect(this) };
+            }
+            else if(trackType=="searchTrack"){
+                trackButton.onclick = function(){ trackSelect(this) };
+            }
+            let hiddenTrackID = document.createElement("input");
+            hiddenTrackID.type = "hidden";
+            hiddenTrackID.name = "track-id";
+            hiddenTrackID.id = "track-id";
+            hiddenTrackID.value = track["id"];
+            trackButton.appendChild(hiddenTrackID);
+            
+            let trackIMG = document.createElement("img");
+            trackIMG.classList.add("track-img");
+            trackIMG.src = track["album"]["images"][0]["url"];
+            trackButton.appendChild(trackIMG);
+            let trackTitle = document.createElement("div");
+            trackTitle.classList.add("track-title");
+            trackButton.appendChild(trackTitle);
+            let trackName = document.createElement("p");
+            trackName.appendChild(document.createTextNode(track["name"]));
+            trackTitle.appendChild(trackName);
+            let trackArtists = document.createElement("div");
+            trackArtists.classList.add("track-artists");
+            trackTitle.appendChild(trackArtists);
+            var i = 0;
+            for (artist of track["artists"]){
+                if(i==track["artists"].length-1){
+                    let trackArtist = document.createElement("p");
+                    trackArtist.appendChild(document.createTextNode(artist["name"]));
+                    trackArtists.appendChild(trackArtist);
+                }
+                else{
+                    let trackArtist = document.createElement("p");
+                    trackArtist.appendChild(document.createTextNode(artist["name"]+",\u00A0"));
+                    trackArtists.appendChild(trackArtist);
+                }
+                i++;
+            }
+            if(trackType=="selectTrack"){
+                let selectedTracklist = document.getElementById("selected-tracklist");
+                selectedTracklist.prepend(trackButton);
+                if(selectedTracklist.childElementCount > 5){
+                    selectedTracklist.removeChild(selectedTracklist.lastElementChild);
+                }
+            }
+            else if(trackType=="searchTrack"){
+                document.getElementById("search-tracklist").appendChild(trackButton);
+            }
+            else if(trackType=="playlistTrack"){
+                document.getElementById("playlist-tracklist").appendChild(trackButton);;
+            }
+        }
+
+        function playlistModify(data){
+            //clear playlist
+            let playlist = document.getElementById("playlist-tracklist");
+            while (playlist.firstChild) {
+                playlist.removeChild(playlist.firstChild);
+            } 
+            //handle playlist
+            for (track of data.playlist.tracks){
+                trackCreate(track, "playlistTrack");
+            }
         }
     </script>
 </body>

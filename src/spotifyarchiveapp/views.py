@@ -48,31 +48,56 @@ def dashboard(request):
     args["display_name"] = user["display_name"]
     args["avi_url"] = user["images"][0]["url"] 
     print(request)
-    if(request.headers.get('X-Requested-With') == 'XMLHttpRequest' and request.GET['search'] is not None):
-        query = request.GET.get('search', None)
-        if(query):
-            results = sp.search(q=query, limit=10, type='track,artist')
-            return JsonResponse({'results':results})
-        else:
-            return JsonResponse({'results': []})
-    if('trackSelect' in request.POST):
-        trackID = request.POST.get("track-id")
-        track = sp.track(track_id=trackID)
-        if('selected-tracks' in request.session):
-            if(track not in request.session['selected-tracks']):
-                request.session['selected-tracks'].insert(0,track)
-                if(len(request.session['selected-tracks']) > 5):
-                    request.session['selected-tracks'].pop()
-        else:
-            request.session['selected-tracks'] = [track]
-        request.session.modified = True
-    if('trackDeselect' in request.POST):
-        trackID = request.POST.get("trackDeselectID")
-        track = sp.track(track_id=trackID)
-        request.session['selected-tracks'].remove(track)
-        request.session.modified = True
+    if(request.headers.get('X-Requested-With') == 'XMLHttpRequest'):
+        if(request.GET.get('action') == 'search'):
+            query = request.GET.get('search', None)
+            if(query):
+                results = sp.search(q=query, limit=10, type='track,artist')
+                return JsonResponse({'results':results})
+            else:
+                return JsonResponse({'results': []})
+        if(request.GET.get('action') == 'track-select'):
+            trackID = request.GET.get('selectedTrackID', None)
+            track = sp.track(track_id=trackID)
+            if('selected-tracks' in request.session):
+                if(track not in request.session['selected-tracks']):
+                    request.session['selected-tracks'].insert(0,track)
+                    if(len(request.session['selected-tracks']) > 5):
+                        request.session['selected-tracks'].pop()
+                else:
+                    return JsonResponse({'track': None})
+            else:
+                request.session['selected-tracks'] = [track]
+            tracks = []
+            for t in request.session['selected-tracks']:
+                tracks.append(t["id"])
+            recs = sp.recommendations(seed_tracks=tracks, limit=100, market=user["country"])
+            request.session['playlist-tracks'] = []
+            for t in recs['tracks']:
+                request.session['playlist-tracks'].append(t)
+            request.session.modified = True
+            return JsonResponse({'track':track, 'playlist':recs})
+        if(request.POST.get('action') == 'track-deselect'):
+            trackID = request.POST.get("trackDeselectID", None)
+            request.session['selected-tracks'] = [i for i in request.session['selected-tracks'] if i['id'] != trackID]
+            tracks = []
+            for t in request.session['selected-tracks']:
+                tracks.append(t["id"])
+            recs = sp.recommendations(seed_tracks=tracks, limit=100, market=user["country"])
+            request.session['playlist-tracks'] = []
+            for t in recs['tracks']:
+                request.session['playlist-tracks'].append(t)
+            request.session.modified = True
+            return JsonResponse({'playlist':recs})
+    #if('trackDeselect' in request.POST):
+    #    trackID = request.POST.get("trackDeselectID")
+    #    track = sp.track(track_id=trackID)
+    #    request.session['selected-tracks'].remove(track)
+    #    request.session.modified = True
     if('selected-tracks' in request.session):
         args["selected"]= request.session['selected-tracks']
+    if('playlist-tracks' in request.session):
+        args["playlist"] = request.session['playlist-tracks']
     return render(request, 'spotifyarchiveapp/dashboard.html', args)
 
 def playlist(request):
