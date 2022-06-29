@@ -50,7 +50,6 @@ h1{
     font-size: medium;
     color: white;
     height: 80%;
-    gap: 10px;
     width: 100%;
 }
 
@@ -207,6 +206,25 @@ h1{
     text-decoration: none;
 }
 
+.playlist-track {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    text-decoration: none;
+    font-family:inherit;
+    font-size: medium;
+    font-weight: normal;
+    color: white;
+    background-color: #101010;
+    border: none;
+    width: 100%;
+}
+
+.playlist-track:hover {
+    background-color: #403c3c;   
+    text-decoration: none;
+}
+
 .track-img {
     width: 40px;
     height: 40px;
@@ -239,7 +257,7 @@ h1{
     font-family: Gotham;
     font-weight: bold;
     font-size: xx-large;
-    width: 48%;
+    width: 100%;
 }
 
 #logout{
@@ -307,7 +325,15 @@ h1{
 }
 
 #filters{
-    width: 20%;
+    display: flex;
+    flex-direction: column;
+    width: 12%;
+    background-color: black;
+    gap: 10px;
+    padding: 20px;
+    color: darkgrey;
+    font-weight: normal;
+    overflow: auto;
 }
 
 .search-selection{
@@ -317,9 +343,11 @@ h1{
     background-color: #101010;
     font-size: medium;
     color: white;
-    height: 100%;
     gap: 10px;
-    width: 40%;
+    width: 44%;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    padding-left: 20px;
 }
 
 #playlist-buttons{
@@ -327,4 +355,142 @@ h1{
     flex-direction: row;
     justify-content: center;
     gap: 50px;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 19px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: darkgrey;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 11px;
+    width: 11px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: green;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px green;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    transform: translateX(20px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 19px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+#numTracksRange {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 10px;  
+    background-color: green;
+    outline: none;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+  #numTracksRange::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%; 
+    background: white;
+    cursor: pointer;
+  }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}
+
+input[type=number] {
+    text-decoration: none;
+    border: none;
+    outline: none;
+    background: none;
+    color: white;
+    font-family: Gotham;
+    font-weight: normal;
+    margin-left: auto;
+    margin-right: 0;
+    -moz-appearance:textfield; /* Firefox */
+    width: 27px;
+}
+
+.tunableTracksRange {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 10px;  
+    background-color: darkgrey;
+    outline: none;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+  }
+  
+.tunableTracksRange::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%; 
+    background: white;
+    cursor: pointer;
+  }
+
+#playlistName{
+    border-style:solid;
+    border-color: darkgrey;
+    background-color: black;
+    color: white;
+    outline: none;
+    font-family: Gotham;
+    font-weight: normal;
+    padding: 5px;
 }

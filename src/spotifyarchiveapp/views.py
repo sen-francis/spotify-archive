@@ -1,5 +1,6 @@
 from audioop import reverse
 import configparser
+from random import seed
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.http import HttpResponse, JsonResponse
 import spotipy
@@ -47,7 +48,6 @@ def dashboard(request):
     user = sp.current_user()
     args["display_name"] = user["display_name"]
     args["avi_url"] = user["images"][0]["url"] 
-    print(request)
     if(request.headers.get('X-Requested-With') == 'XMLHttpRequest'):
         if(request.GET.get('action') == 'search'):
             query = request.GET.get('search', None)
@@ -68,35 +68,44 @@ def dashboard(request):
                     return JsonResponse({'track': None})
             else:
                 request.session['selected-tracks'] = [track]
-            tracks = []
-            for t in request.session['selected-tracks']:
-                tracks.append(t["id"])
-            recs = sp.recommendations(seed_tracks=tracks, limit=100, market=user["country"])
-            request.session['playlist-tracks'] = []
-            for t in recs['tracks']:
-                request.session['playlist-tracks'].append(t)
             request.session.modified = True
-            return JsonResponse({'track':track, 'playlist':recs})
+            return JsonResponse({'track':track})
         if(request.POST.get('action') == 'track-deselect'):
             trackID = request.POST.get("trackDeselectID", None)
             request.session['selected-tracks'] = [i for i in request.session['selected-tracks'] if i['id'] != trackID]
+            request.session['playlist-tracks'] = []
+            if(len(request.session['selected-tracks']) == 0):
+                request.session.modified = True
+                return JsonResponse({'success': None})
+            return JsonResponse({'sucess': True})
+        if(request.GET.get('action') == 'get-playlist'):
+            dict = {}
+            for key, value in request.GET.items():
+                dict[key] = value
+            dict.pop('action', None)
+            dict['country'] = user['country']
             tracks = []
             for t in request.session['selected-tracks']:
                 tracks.append(t["id"])
-            recs = sp.recommendations(seed_tracks=tracks, limit=100, market=user["country"])
+            dict['seed_tracks'] = tracks
+            recs = sp.recommendations(**dict)
             request.session['playlist-tracks'] = []
+            print(len(recs['tracks']))
             for t in recs['tracks']:
                 request.session['playlist-tracks'].append(t)
             request.session.modified = True
             return JsonResponse({'playlist':recs})
-    #if('trackDeselect' in request.POST):
-    #    trackID = request.POST.get("trackDeselectID")
-    #    track = sp.track(track_id=trackID)
-    #    request.session['selected-tracks'].remove(track)
-    #    request.session.modified = True
     if('selected-tracks' in request.session):
-        args["selected"]= request.session['selected-tracks']
+        args["selected"] = request.session['selected-tracks']
     if('playlist-tracks' in request.session):
+        tracks = []
+        for t in request.session['selected-tracks']:
+            tracks.append(t["id"])
+        recs = sp.recommendations(seed_tracks=tracks, limit=50, country=user['country'])
+        request.session['playlist-tracks'] = []
+        print(len(recs['tracks']))
+        for t in recs['tracks']:
+            request.session['playlist-tracks'].append(t)
         args["playlist"] = request.session['playlist-tracks']
     return render(request, 'spotifyarchiveapp/dashboard.html', args)
 
