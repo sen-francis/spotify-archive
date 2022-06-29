@@ -34,5 +34,18 @@
             <img id="light-logo" src="{% static 'spotifyarchiveapp/assets/images/GitHub-Mark-Light-32px.png' %}">
         </a>
     </footer>
+    <script>
+        function dropdown(){
+            //if menu already open
+            if(document.getElementById("drop-arrow").textContent=="\u25B2"){
+                document.getElementById("drop-arrow").innerHTML = "&#9660";
+                document. getElementById("drop-content").style.display = "none";
+            }
+            else{
+                document.getElementById("drop-arrow").innerHTML = "&#9650";
+                document. getElementById("drop-content").style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>

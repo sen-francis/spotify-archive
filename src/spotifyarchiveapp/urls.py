@@ -5,8 +5,8 @@ from django.conf.urls import handler404
 urlpatterns = [
     path('', views.home, name='home'),
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('playlist/', views.playlist, name='playlist'),
     path('success/', views.success, name='success'),
+    path('error404/', views.handler404, name='error404'),
 ]
 
-handler404 = 'spotifyarchiveapp.views.error404'
+handler404 = 'spotifyarchiveapp.views.handler404'
