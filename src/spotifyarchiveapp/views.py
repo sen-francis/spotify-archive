@@ -23,10 +23,8 @@ sp_oauth = oauth2.SpotifyOAuth(
 
 sp = spotipy.Spotify(auth_manager=sp_oauth)
 
-def handler404(request, exception, template_name="404.html"):
-    response = render(template_name)
-    response.status_code = 404
-    return response
+def handler404(request, exception):
+    return render(request, "spotifyarchiveapp/404.html")
 
 def home(request):
     if(request.method == 'POST'):
@@ -88,14 +86,12 @@ def dashboard(request):
             dict['seed_tracks'] = tracks
             recs = sp.recommendations(**dict)
             request.session['playlist-tracks'] = []
-            print(len(recs['tracks']))
             for t in recs['tracks']:
                 request.session['playlist-tracks'].append(t)
             request.session.modified = True
             return JsonResponse({'playlist':recs})
         if(request.POST.get('action') == 'playlist-name-change'):
             request.session['playlist-name'] = request.POST.get("playlistName", None)
-            print(request.session['playlist-name'])
             return HttpResponse('')
     if('selected-tracks' in request.session):
         args["selected"] = request.session['selected-tracks']
@@ -105,7 +101,6 @@ def dashboard(request):
             tracks.append(t["id"])
         recs = sp.recommendations(seed_tracks=tracks, limit=50, country=user['country'])
         request.session['playlist-tracks'] = []
-        print(len(recs['tracks']))
         for t in recs['tracks']:
             request.session['playlist-tracks'].append(t)
         args["playlist"] = request.session['playlist-tracks']
