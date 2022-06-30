@@ -503,3 +503,30 @@ input[type=number] {
     font-weight: normal;
     padding: 5px;
 }
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 180px;
+    background-color: darkgray;
+    color: #fff;
+    padding: 5px;
+    border-radius: 6px;
+    font-size:small;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    bottom: 110%;
+    margin-left: -102%;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
