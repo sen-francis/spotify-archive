@@ -10,3 +10,6 @@ urlpatterns = [
 ]
 
 handler404 = 'spotifyarchiveapp.views.handler404'
+handler500 = 'spotifyarchiveapp.views.handler404'
+handler403 = 'spotifyarchiveapp.views.handler404'
+handler400 = 'spotifyarchiveapp.views.handler404'
