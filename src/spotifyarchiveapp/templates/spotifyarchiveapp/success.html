@@ -13,7 +13,6 @@
             <p id="display-name">{{display_name}}</p>
             <p id="drop-arrow">&#9660</p>
         </div>
-        <a class="website-logo">Spotify Archive Logo</a>
         <div id="drop-content">
             <form name="logoutForm" method="POST" action="#">
                 {% csrf_token %}
@@ -23,10 +22,10 @@
     </div>
     <main class="main">
         <h1 style="text-align: center;">Succesfully created a playlist just for you!</h1>
-        <h2 style="text-align: center;">Check your Spotify library to listen to your new playlist!</h2>
+        <h2 style="text-align: center;">Check your Spotify library to listen to your new playlist</h2>
         <form name="createAnotherForm" action="#" method="post"> 
             {% csrf_token %}
-            <input class="get-started" type="submit" name="create-another" value="Create Another" />
+            <input class="get-started" type="submit" name="create-another" value="CREATE ANOTHER" />
         </form>
     </main>
     <footer class="footer">

@@ -1,5 +1,4 @@
 from audioop import reverse
-import configparser
 from logging import raiseExceptions
 from random import seed
 from django.shortcuts import render, HttpResponseRedirect, redirect
@@ -9,10 +8,8 @@ import spotipy.util as util
 from spotipy import oauth2
 import os
 
-config = configparser.ConfigParser()
-config.read('config.cfg')
-SPOTIPY_CLIENT_ID = config.get('SPOTIFY', 'CLIENT_ID')
-SPOTIPY_CLIENT_SECRET = config.get('SPOTIFY', 'CLIENT_SECRET')
+SPOTIPY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+SPOTIPY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
 
 SPOTIPY_REDIRECT_URI = 'http://localhost:8000/dashboard/'
 SCOPE = 'user-read-private playlist-modify-private'
