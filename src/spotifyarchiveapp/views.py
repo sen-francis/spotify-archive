@@ -8,7 +8,6 @@ import spotipy.util as util
 from spotipy import oauth2
 import os
 
-
 # configure Spotipy API
 def initSpotipy():
     SPOTIPY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
@@ -38,10 +37,13 @@ def home(request):
 
 # view for website dashboard
 def dashboard(request):
+    global sp
     # initialize spotipy with user access code
     if(request.GET.get('code')):
+        #request.session['code'] = request.GET.get('code')
         sp_oauth.get_access_token(request.GET.get('code'))
-        global sp
+        sp = spotipy.Spotify(auth_manager=sp_oauth)
+    else:
         sp = spotipy.Spotify(auth_manager=sp_oauth)
     # handle logout
     if('logout' in request.POST):
@@ -86,7 +88,7 @@ def dashboard(request):
         # handle AJAX track deselect request
         if(request.POST.get('action') == 'track-deselect'):
             # get track id and remove it from dict
-            trackID = request.POST.get("trackDeselectID", None)
+            trackID = request.POST.get('trackDeselectID', None)
             request.session['selected-tracks'] = [
                 i for i in request.session['selected-tracks'] if i['id'] != trackID]
             # return None if there are not any selected tracks, True if there are tracks
@@ -107,7 +109,7 @@ def dashboard(request):
             # insert all selected track ids to a list for seed_tracks
             tracks = []
             for t in request.session['selected-tracks']:
-                tracks.append(t["id"])
+                tracks.append(t['id'])
             dict['seed_tracks'] = tracks
             # call spotipy recommendation function with our dict values
             recs = sp.recommendations(**dict)
@@ -120,31 +122,31 @@ def dashboard(request):
         # handle AJAX playlist name change request
         if(request.POST.get('action') == 'playlist-name-change'):
             request.session['playlist-name'] = request.POST.get(
-                "playlistName", None)
+                'playlistName', None)
             return HttpResponse('')
     # fill args dict with user info to be displayed in top right
     args = {}
-    args["display_name"] = user["display_name"]
+    args['display_name'] = user['display_name']
     #check if any avi exists
-    if(len(user["images"]) > 0):
-        args["avi_url"] = user["images"][0]["url"]
+    if(len(user['images']) > 0):
+        args['avi_url'] = user['images'][0]['url']
     #update below args if tracks are selected
     if('selected-tracks' in request.session):
         if (len(request.session['selected-tracks']) != 0):
             # update selected tracks in args
-            args["selected"] = request.session['selected-tracks']
+            args['selected'] = request.session['selected-tracks']
             # update playlist tracks in args
             if('playlist-tracks' in request.session):
                 # when session has selected tracks variable (e.g on refresh) generate a new playlist
                 tracks = []
                 for t in request.session['selected-tracks']:
-                    tracks.append(t["id"])
+                    tracks.append(t['id'])
                 recs = sp.recommendations(
                     seed_tracks=tracks, limit=50, country=user['country'])
                 request.session['playlist-tracks'] = []
                 for t in recs['tracks']:
                     request.session['playlist-tracks'].append(t)
-                args["playlist"] = request.session['playlist-tracks']
+                args['playlist'] = request.session['playlist-tracks']
     return render(request, 'spotifyarchiveapp/dashboard.html', args)
 
 # view for website success page
@@ -156,17 +158,24 @@ def success(request):
         return redirect(dashboard)
     # create playlist in user's Spotify library
     if ('playlist-tracks' in request.session):
+        #generate playlist description
+        description='Playlist created using Spotify Archive. Seed Tracks: '
+        for ind, t in enumerate(request.session['selected-tracks']):
+            if(ind == len(request.session['selected-tracks'])-1):
+                description += (t['name'] + ' by ' + t['artists'][0]['name'] + '.')
+            else:    
+                description += (t['name'] + ' by ' + t['artists'][0]['name'] + ', ')
         # check if user provides playlist name, else use default name
         if('playlist-name' in request.session):
             playlist = sp.user_playlist_create(sp.current_user(
-            )["id"], request.session["playlist-name"], public=False, collaborative=False, description='Playlist created using Spotify Archive.')
+            )['id'], request.session['playlist-name'], public=False, collaborative=False, description=description)
         else:
             playlist = sp.user_playlist_create(sp.current_user(
-            )["id"], "Spotify Archive Playlist", public=False, collaborative=False, description='Playlist created using Spotify Archive.')
+            )['id'], 'Spotify Archive Playlist', public=False, collaborative=False, description=description)
         # add tracks to playlist
         tracks = [t['id'] for t in request.session['playlist-tracks']]
         sp.user_playlist_add_tracks(
-            sp.current_user()["id"], playlist["id"], tracks, position=None)
+            sp.current_user()['id'], playlist['id'], tracks, position=None)
         # clear session cache
         request.session.pop('playlist-tracks', None)
         request.session.pop('selected-tracks', None)
@@ -176,10 +185,10 @@ def success(request):
         # prepare args so that user icon and name is displayed in top right
         args = {}
         user = sp.current_user()
-        args["display_name"] = user["display_name"]
+        args['display_name'] = user['display_name']
         #check if any avi exists
-        if(len(user["images"]) > 0):
-            args["avi_url"] = user["images"][0]["url"]
+        if(len(user['images']) > 0):
+            args['avi_url'] = user['images'][0]['url']
         return render(request, 'spotifyarchiveapp/success.html', args)
     except:
         return redirect(home)
