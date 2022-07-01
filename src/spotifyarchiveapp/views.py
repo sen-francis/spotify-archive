@@ -22,13 +22,14 @@ def initSpotipy():
         redirect_uri=SPOTIPY_REDIRECT_URI, scope=SCOPE, cache_path=CACHE,
         show_dialog=True
     )
-    global sp
-    sp = spotipy.Spotify(auth_manager=sp_oauth)
 
 initSpotipy()
 
 # view for website home
 def home(request):
+    # remove any existing cache
+    if os.path.exists('.spotipyoauthcache'):
+        os.remove('.spotipyoauthcache')
     # handle login redirect
     if(request.method == 'POST'):
         auth_url = sp_oauth.get_authorize_url()
@@ -37,9 +38,11 @@ def home(request):
 
 # view for website dashboard
 def dashboard(request):
-    #init access token
+    # initialize spotipy with user access code
     if(request.GET.get('code')):
         sp_oauth.get_access_token(request.GET.get('code'))
+        global sp
+        sp = spotipy.Spotify(auth_manager=sp_oauth)
     # handle logout
     if('logout' in request.POST):
         return logout(request)
@@ -122,7 +125,9 @@ def dashboard(request):
     # fill args dict with user info to be displayed in top right
     args = {}
     args["display_name"] = user["display_name"]
-    args["avi_url"] = user["images"][0]["url"]
+    #check if any avi exists
+    if(len(user["images"]) > 0):
+        args["avi_url"] = user["images"][0]["url"]
     #update below args if tracks are selected
     if('selected-tracks' in request.session):
         if (len(request.session['selected-tracks']) != 0):
@@ -180,7 +185,8 @@ def success(request):
 # function to that performs logout
 def logout(request):
     # remove cache and session vars
-    os.remove('.spotipyoauthcache')
+    if os.path.exists('.spotipyoauthcache'):
+        os.remove('.spotipyoauthcache')
     request.session.pop('playlist-tracks', None)
     request.session.pop('selected-tracks', None)
     request.session.pop('playlist-name', None)

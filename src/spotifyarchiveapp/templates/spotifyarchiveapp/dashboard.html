@@ -9,7 +9,11 @@
 <body>
     <div class="header">
         <div id="display-user" class="button" onclick="dropdown()">
-            <img id="display-img" src="{{avi_url}}">
+            {% if avi_url %}
+                <img id="display-img" src="{{avi_url}}">
+            {% else %}
+                <img id="display-img" src="{% static 'spotifyarchiveapp/assets/images/default_avi.jpg' %}">
+            {% endif %}
             <p id="display-name">{{display_name}}</p>
             <p id="drop-arrow">&#9660</p>
         </div>
