@@ -123,21 +123,23 @@ def dashboard(request):
     args = {}
     args["display_name"] = user["display_name"]
     args["avi_url"] = user["images"][0]["url"]
-    # update selected tracks in args
+    #update below args if tracks are selected
     if('selected-tracks' in request.session):
-        args["selected"] = request.session['selected-tracks']
-    # update playlist tracks in args
-    if('playlist-tracks' in request.session):
-        # when session has selected tracks variable (e.g on refresh) generate a new playlist
-        tracks = []
-        for t in request.session['selected-tracks']:
-            tracks.append(t["id"])
-        recs = sp.recommendations(
-            seed_tracks=tracks, limit=50, country=user['country'])
-        request.session['playlist-tracks'] = []
-        for t in recs['tracks']:
-            request.session['playlist-tracks'].append(t)
-        args["playlist"] = request.session['playlist-tracks']
+        if (len(request.session['selected-tracks']) != 0):
+            # update selected tracks in args
+            args["selected"] = request.session['selected-tracks']
+            # update playlist tracks in args
+            if('playlist-tracks' in request.session):
+                # when session has selected tracks variable (e.g on refresh) generate a new playlist
+                tracks = []
+                for t in request.session['selected-tracks']:
+                    tracks.append(t["id"])
+                recs = sp.recommendations(
+                    seed_tracks=tracks, limit=50, country=user['country'])
+                request.session['playlist-tracks'] = []
+                for t in recs['tracks']:
+                    request.session['playlist-tracks'].append(t)
+                args["playlist"] = request.session['playlist-tracks']
     return render(request, 'spotifyarchiveapp/dashboard.html', args)
 
 # view for website success page
