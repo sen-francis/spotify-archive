@@ -8,18 +8,24 @@ import spotipy.util as util
 from spotipy import oauth2
 import os
 
-# Configure Spotipy API
-SPOTIPY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
-SPOTIPY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
-SPOTIPY_REDIRECT_URI = os.environ.get('SPOTIFY_REDIRECT_URI')
-SCOPE = 'user-read-private playlist-modify-private'
-CACHE = '.spotipyoauthcache'
-sp_oauth = oauth2.SpotifyOAuth(
-    client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET,
-    redirect_uri=SPOTIPY_REDIRECT_URI, scope=SCOPE, cache_path=CACHE,
-    show_dialog=True
-)
-sp = spotipy.Spotify(auth_manager=sp_oauth)
+
+# configure Spotipy API
+def initSpotipy():
+    SPOTIPY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+    SPOTIPY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
+    SPOTIPY_REDIRECT_URI = os.environ.get('SPOTIFY_REDIRECT_URI')
+    SCOPE = 'user-read-private playlist-modify-private'
+    CACHE = '.spotipyoauthcache'
+    global sp_oauth 
+    sp_oauth= oauth2.SpotifyOAuth(
+        client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET,
+        redirect_uri=SPOTIPY_REDIRECT_URI, scope=SCOPE, cache_path=CACHE,
+        show_dialog=True
+    )
+    global sp
+    sp = spotipy.Spotify(auth_manager=sp_oauth)
+
+initSpotipy()
 
 # view for website home
 def home(request):
@@ -31,6 +37,9 @@ def home(request):
 
 # view for website dashboard
 def dashboard(request):
+    #init access token
+    if(request.GET.get('code')):
+        sp_oauth.get_access_token(request.GET.get('code'))
     # handle logout
     if('logout' in request.POST):
         return logout(request)
