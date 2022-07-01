@@ -177,7 +177,9 @@ def success(request):
         args = {}
         user = sp.current_user()
         args["display_name"] = user["display_name"]
-        args["avi_url"] = user["images"][0]["url"]
+        #check if any avi exists
+        if(len(user["images"]) > 0):
+            args["avi_url"] = user["images"][0]["url"]
         return render(request, 'spotifyarchiveapp/success.html', args)
     except:
         return redirect(home)
