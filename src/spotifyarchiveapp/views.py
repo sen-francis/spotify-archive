@@ -23,9 +23,6 @@ sp_oauth = oauth2.SpotifyOAuth(
 
 sp = spotipy.Spotify(auth_manager=sp_oauth)
 
-def handler404(request, exception):
-    return render(request, "spotifyarchiveapp/404.html")
-
 def home(request):
     if(request.method == 'POST'):
         auth_url = sp_oauth.get_authorize_url()
