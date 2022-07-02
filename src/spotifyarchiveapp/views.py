@@ -32,6 +32,8 @@ def home(request):
     # remove any existing cache
     if os.path.exists('.spotipyoauthcache'):
         os.remove('.spotipyoauthcache')
+    if os.path.exists('.cache'):
+        os.remove('.cache')
     # handle login redirect
     if('log-in' in request.POST):
         if('fake_login' in request.session):
