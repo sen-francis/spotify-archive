@@ -40,7 +40,6 @@ def dashboard(request):
     global sp
     # initialize spotipy with user access code
     if(request.GET.get('code')):
-        #request.session['code'] = request.GET.get('code')
         sp_oauth.get_access_token(request.GET.get('code'))
         sp = spotipy.Spotify(auth_manager=sp_oauth)
     else:

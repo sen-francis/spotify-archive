@@ -307,11 +307,11 @@
                 {% endif %}
             </div>
             <div id="playlist-buttons">
+                <input class = "submit" name="reSeedButton" type="submit" value="Regenerate Playlist" onclick="getPlaylist()">
                 <form id="submitForm" method="POST" action="#">
                     {% csrf_token %}
                     <input class = "submit" name="submitButton" type="submit" value="Create Playlist">
                 </form>
-                <input class = "submit" name="reSeedButton" type="submit" value="Re-seed Playlist" onclick="getPlaylist()">
             </div>    
         </div>    
     </div>
