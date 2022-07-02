@@ -163,4 +163,4 @@ cython_debug/
 *.spotipyoauthcache
 
 #Static Files
-/src/staticfiles
+/src/staticfiles/
