@@ -161,3 +161,6 @@ cython_debug/
 
 #Spotify Cache
 *.spotipyoauthcache
+
+#Static Files
+/src/staticfiles
