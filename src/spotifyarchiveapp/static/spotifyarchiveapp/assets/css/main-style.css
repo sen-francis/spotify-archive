@@ -118,7 +118,27 @@ h1 {
     margin-bottom: auto;
 }
 
-.get-started {
+.log-in-big {
+    border: none;
+    border-radius: 999px;
+    background-color: green;
+    color: white;
+    font-size: x-large;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    font-family: inherit;
+    transition-duration: 0.4s;
+    width: 15%;
+    height: 20%;
+    cursor: pointer;
+}
+
+.log-in-big:hover {
+    background-color:darkgreen;
+}
+
+#create-another{
     border: none;
     border-radius: 999px;
     background-color: green;
@@ -131,10 +151,32 @@ h1 {
     transition-duration: 0.4s;
     width: 15%;
     height: 7%;
-    float: right;
     position: absolute;
-    right: 42.5%;
     cursor: pointer;
+}
+
+#create-another:hover {
+    background-color:darkgreen;
+}
+
+.no-log-in-big{
+    border: none;
+    border-radius: 999px;
+    background-color: darkgray;
+    color: white;
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    font-family: inherit;
+    transition-duration: 0.4s;
+    width: 15%;
+    height: 20%;
+    cursor: pointer;
+}
+
+.no-log-in-big:hover{
+    background-color:dimgray;
 }
 
 #display-user {
@@ -375,8 +417,6 @@ h1 {
     flex-direction: row;
     justify-content: center;
     gap: 50px;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 #numTracksRange {

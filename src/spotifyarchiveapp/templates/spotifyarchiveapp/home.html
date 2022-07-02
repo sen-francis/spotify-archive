@@ -20,10 +20,13 @@
       <h1 style="text-align: center">Discover new music.</h1>
       <h1 style="text-align: center">Generate personalized playlists.</h1>
       <h1 style="text-align: center">Save to your Spotify library.</h1>
-      <form action="#" method="post">
-        {% csrf_token %}
-        <input class="get-started" type="submit" value="GET STARTED" />
-      </form>
+      <div id="playlist-buttons" style="height: 100%; width: 100%;">
+        <form action="#" method="post" id="playlist-buttons" style="height: 100%; width: 100%;">
+            {% csrf_token %}
+            <input class="log-in-big" name="log-in" type="submit" value="LOG IN" />
+            <input class="no-log-in-big" name="no-log-in" type="submit" value="CONTINUE WITHOUT LOGIN" />
+        </form>
+      </div>
     </main>
     <footer class="footer">
       <a id="github-logo" href="https://github.com/sen-francis/spotify-archive">

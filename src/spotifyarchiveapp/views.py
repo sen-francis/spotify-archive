@@ -6,23 +6,26 @@ from django.http import HttpResponse, JsonResponse
 import spotipy
 import spotipy.util as util
 from spotipy import oauth2
+from spotipy.oauth2 import SpotifyClientCredentials
 import os
 
-# configure Spotipy API
-def initSpotipy():
+# configure Spotipy API for either client credentials or authorization depending on flow
+def initSpotipy(flow):
     SPOTIPY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
     SPOTIPY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
-    SPOTIPY_REDIRECT_URI = os.environ.get('SPOTIFY_REDIRECT_URI')
-    SCOPE = 'user-read-private playlist-modify-private'
-    CACHE = '.spotipyoauthcache'
-    global sp_oauth 
-    sp_oauth= oauth2.SpotifyOAuth(
-        client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET,
-        redirect_uri=SPOTIPY_REDIRECT_URI, scope=SCOPE, cache_path=CACHE,
-        show_dialog=True
-    )
-
-initSpotipy()
+    if flow == 'authorization': 
+        SPOTIPY_REDIRECT_URI = os.environ.get('SPOTIFY_REDIRECT_URI')
+        SCOPE = 'user-read-private playlist-modify-private'
+        CACHE = '.spotipyoauthcache'
+        global sp_oauth 
+        sp_oauth= oauth2.SpotifyOAuth(
+            client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET,
+            redirect_uri=SPOTIPY_REDIRECT_URI, scope=SCOPE, cache_path=CACHE,
+            show_dialog=True
+        )
+    elif flow == 'client-credentials':
+        global client
+        client = SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET)
 
 # view for website home
 def home(request):
@@ -30,29 +33,53 @@ def home(request):
     if os.path.exists('.spotipyoauthcache'):
         os.remove('.spotipyoauthcache')
     # handle login redirect
-    if(request.method == 'POST'):
+    if('log-in' in request.POST):
+        if('fake_login' in request.session):
+            request.session.pop('fake_login', None)
+        initSpotipy('authorization')
         auth_url = sp_oauth.get_authorize_url()
         return redirect(auth_url)
+    #handle no login redirect
+    if('no-log-in' in request.POST):
+        initSpotipy('client-credentials')
+        request.session['fake_login'] = 'True'
+        return redirect(dashboard)
     return render(request, 'spotifyarchiveapp/home.html')
 
 # view for website dashboard
 def dashboard(request):
     global sp
-    # initialize spotipy with user access code
-    if(request.GET.get('code')):
-        sp_oauth.get_access_token(request.GET.get('code'))
-        sp = spotipy.Spotify(auth_manager=sp_oauth)
-    else:
-        sp = spotipy.Spotify(auth_manager=sp_oauth)
+    args = {}
     # handle logout
     if('logout' in request.POST):
         return logout(request)
+    # handle login
+    if('log-in' in request.POST):
+        if('fake_login' in request.session):
+            request.session.pop('fake_login', None)
+        initSpotipy('authorization')
+        auth_url = sp_oauth.get_authorize_url()
+        return redirect(auth_url)
     # handle create playlist
     if('submitButton' in request.POST):
         if len(request.session['selected-tracks']) != 0:
             return redirect(success)
-    # get user info        
-    user = sp.current_user()
+    #handle non-login case
+    if('fake_login' in request.session):
+        print('here')
+        args['fake_login'] = True
+        sp = spotipy.Spotify(auth_manager=client)
+    else:
+        # handle login cases
+        if(request.GET.get('code')):
+            sp_oauth.get_access_token(request.GET.get('code'))
+            sp = spotipy.Spotify(auth_manager=sp_oauth)
+        else:
+            sp = spotipy.Spotify(auth_manager=sp_oauth)
+    user = None
+    if('fake_login' not in request.session):
+        # get user info        
+        user = sp.current_user()
     # occurs during AJAX request
     if(request.headers.get('X-Requested-With') == 'XMLHttpRequest'):
         # handle AJAX search request
@@ -104,7 +131,10 @@ def dashboard(request):
                 dict[key] = value
             # action value should not be used in recommend function
             dict.pop('action', None)
-            dict['country'] = user['country']
+            if user is not None:
+                dict['country'] = user['country']
+            else:
+                dict['country'] = 'US'
             # insert all selected track ids to a list for seed_tracks
             tracks = []
             for t in request.session['selected-tracks']:
@@ -124,11 +154,11 @@ def dashboard(request):
                 'playlistName', None)
             return HttpResponse('')
     # fill args dict with user info to be displayed in top right
-    args = {}
-    args['display_name'] = user['display_name']
-    #check if any avi exists
-    if(len(user['images']) > 0):
-        args['avi_url'] = user['images'][0]['url']
+    if user is not None:
+        args['display_name'] = user['display_name']
+        #check if any avi exists
+        if(len(user['images']) > 0):
+            args['avi_url'] = user['images'][0]['url']
     #update below args if tracks are selected
     if('selected-tracks' in request.session):
         if (len(request.session['selected-tracks']) != 0):
@@ -140,8 +170,12 @@ def dashboard(request):
                 tracks = []
                 for t in request.session['selected-tracks']:
                     tracks.append(t['id'])
-                recs = sp.recommendations(
-                    seed_tracks=tracks, limit=50, country=user['country'])
+                if user is not None:
+                    recs = sp.recommendations(
+                        seed_tracks=tracks, limit=50, country=user['country'])
+                else:
+                    recs = sp.recommendations(
+                        seed_tracks=tracks, limit=50, country='US')
                 request.session['playlist-tracks'] = []
                 for t in recs['tracks']:
                     request.session['playlist-tracks'].append(t)
