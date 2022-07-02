@@ -27,13 +27,18 @@ def initSpotipy(flow):
         global client
         client = SpotifyClientCredentials(client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET)
 
+# view for 404 page
 def page_not_found(request, exception):
     if('error-redirect' in request.POST):
         return redirect(home)
     return render(request, "errors/404.html", {})
 
+# view for 500 page 
 def error(request, exception=None):
     if('error-redirect' in request.POST):
+        # remove any existing cache
+        if os.path.exists('.spotipyoauthcache'):
+            os.remove('.spotipyoauthcache')
         initSpotipy('client-credentials')
         request.session['fake_login'] = 'True'
         return redirect(dashboard)
