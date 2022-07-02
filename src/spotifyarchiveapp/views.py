@@ -39,9 +39,7 @@ def error(request, exception=None):
         # remove any existing cache
         if os.path.exists('.spotipyoauthcache'):
             os.remove('.spotipyoauthcache')
-        initSpotipy('client-credentials')
-        request.session['fake_login'] = 'True'
-        return render(request, 'spotifyarchiveapp/dashboard.html')
+        return redirect(home)
     return render(request, "errors/500.html", {})
 
 # view for website home
