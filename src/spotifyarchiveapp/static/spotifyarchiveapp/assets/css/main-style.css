@@ -219,6 +219,7 @@ h1 {
     width: 10%;
     padding: 5px;
     border-radius: 5px;
+    z-index: 99;
 }
 
 #drop-content a {

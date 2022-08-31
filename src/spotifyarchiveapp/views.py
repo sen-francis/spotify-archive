@@ -81,7 +81,7 @@ def dashboard(request):
         return redirect(auth_url)
     # handle create playlist
     if('submitButton' in request.POST):
-        if len(request.session['selected-tracks']) != 0:
+        if ('selected-tracks' in request.session and len(request.session['selected-tracks']) != 0):
             return redirect(success)
     #handle non-login case
     if('fake_login' in request.session):
