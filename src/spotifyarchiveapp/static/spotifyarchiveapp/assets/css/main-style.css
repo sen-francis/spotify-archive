@@ -410,6 +410,7 @@ h1 {
     padding-top: 20px;
     padding-bottom: 10px;
     padding-left: 20px;
+    position: relative;
 }
 
 #playlist-buttons {
@@ -584,4 +585,24 @@ input[type=number] {
 
 #error-button:hover {
     color: darkgreen;
+}
+
+#loading-spinner {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid green;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    position: absolute;
+    display: none;
+    left: 50%;
+    top: 50%;
+    margin-top: -80px;
+    margin-left: -60px;
+}
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

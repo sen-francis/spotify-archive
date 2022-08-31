@@ -277,6 +277,7 @@
                     {% endfor %}
                 {% endif %}
             </div>
+            <div id="loading-spinner"></div>
             {% if not fake_login %}
                 <div id="playlist-buttons">
                     <input class = "submit" name="reSeedButton" type="submit" value="Regenerate Playlist" onclick="getPlaylist()">
@@ -310,31 +311,27 @@
         
         //debounce function
         function debounce(func, wait, immediate) {
-            var timeout;
-
+            let timeout;
             return function executedFunction() {
-                var context = this;
-                var args = arguments;
-                    
-                var later = function() {
+                let context = this;
+                let args = arguments;
+                let later = function() {
                 timeout = null;
                 if (!immediate) func.apply(context, args);
                 };
-
-                var callNow = immediate && !timeout;
-                
+                let callNow = immediate && !timeout;
                 clearTimeout(timeout);
-
                 timeout = setTimeout(later, wait);
-                
                 if (callNow) func.apply(context, args);
             };
         }
         
         //search function, sends AJAX GET request to python code to fetch search results
+        //declare global variable to track if there is a previously active AJAX request
+        let searchRequest = null;
         function search(){
-                var query = document.getElementById("search-bar").value;
-                $.ajax({
+                let query = document.getElementById("search-bar").value;
+                searchRequest = $.ajax({
                     method: "GET",
                     url: "{% url 'dashboard' %}",
                     data: 
@@ -342,6 +339,14 @@
                             "search": query,
                             "action": "search"
                         },
+                    beforeSend : function(){
+                        //NOTE: this block executes before the request.
+                        //if there is a previous request, abort and continue with the current request        
+                        if(searchRequest != null) {
+                            searchRequest.abort();
+                            searchRequest = null;
+                        }
+                    },
                     success: function(data) {
                         document.getElementById("search-tracklist").innerHTML = "";
                         if(query == ""){
@@ -352,15 +357,14 @@
                         }
                     },
                     error: function(error){
-                        console.log(error);
-                        console.log("error");
+                        console.log("[ERROR]: "+error);
                     }
-                    });
+                });
         }
 
-        //calls search function with 250ms debounce, used as oninput function for search bar
-        const processSearch = debounce(search, 250);
-
+        //calls search function with 275ms debounce, used as oninput function for search bar
+        const processSearch = debounce(search, 275);
+        
         //track select function, sends AJAX GET request to python code to retrieve the track object
         function trackSelect(element){
             let selectedTrackID = element.firstChild.value;
@@ -379,10 +383,10 @@
                     trackCreate(track, "selectTrack");
                     //fetch a new recommendation playlist with updated tracks
                     getPlaylist();
+
                 },
                 error: function(error){
-                    console.log(error); 
-                    console.log("error");
+                    console.log("[ERROR]: "+error);
                 }
             });
         }
@@ -407,14 +411,13 @@
                     else{
                         //clear recommended playlist section
                         let playlist = document.getElementById("playlist-tracklist");
-                        while (playlist.firstChild) {
-                            playlist.removeChild(playlist.firstChild);
+                        while (playlist.hasChildNodes()) {
+                            playlist.removeChild(playlist.lastChild);
                         } 
                     }
                 },
                 error: function(error){
-                    console.log(error);
-                    console.log("error");
+                    console.log("[ERROR]: "+error);
                 }
             });
         }
@@ -461,7 +464,7 @@
             let trackArtists = document.createElement("div");
             trackArtists.classList.add("track-artists");
             trackTitle.appendChild(trackArtists);
-            var i = 0;
+            let i = 0;
             for (artist of track["artists"]){
                 if(i==track["artists"].length-1){
                     let trackArtist = document.createElement("p");
@@ -492,12 +495,12 @@
             }
         }
 
-        //updates recommended playlist in HTML DOM
+        //function updates recommended playlist in HTML DOM
         function updatePlaylist(data){
             //clear old playlist
             let playlist = document.getElementById("playlist-tracklist");
-            while (playlist.firstChild) {
-                playlist.removeChild(playlist.firstChild);
+            while (playlist.hasChildNodes()) {
+                playlist.removeChild(playlist.lastChild);
             } 
             //add new tracks to playlist
             for (track of data.playlist.tracks){
@@ -505,30 +508,45 @@
             }
         }
 
-        //called when recommended playlist needs to be updated
+        //function called when recommended playlist needs to be updated
         //sends AJAX GET request to python code to get a new recommendation playlist based on new playlist details
+        //declare global variable to track if there is a previously active AJAX request
+        let getPlaylistRequest = null;
         function getPlaylist(){
             //only execute if there are selected tracks
             if(document.getElementById("selected-tracklist").childElementCount>0){
                 //create dictionary object
                 dict = createFilterDict();
                 dict["action"] = "get-playlist";
-                $.ajax({
+                getPlaylistRequest = $.ajax({
                     method: "GET",
                     url: "{% url 'dashboard' %}",
                     data: dict,
+                    beforeSend : function(){
+                        //NOTE: this block executes before the request
+                        //if there is a previous request, abort and continue with the current request    
+                        if(getPlaylistRequest != null){
+                            getPlaylistRequest.abort();
+                            getPlaylistRequest=null;
+                        }
+                        //make loading spinner visible and change opacity of track list (shows playlist is being updated)
+                        document.getElementById("loading-spinner").style.display="inline-block";
+                        document.getElementById("playlist-tracklist").style.opacity="0.5";
+                    },
                     success: function(data) {
                         updatePlaylist(data);
+                        //once playlist is done updating, revert tracklist opacity and hide loading spinner
+                        document.getElementById("loading-spinner").style.display="none";
+                        document.getElementById("playlist-tracklist").style.opacity="1";
                     },
                     error: function(error){
-                        console.log(error);
-                        console.log("error");
+                        console.log("[ERROR]: "+error);
                     }
                 });
             }
         }
 
-        //create dictionary with playlist details and tunable track attribute values (if checked)
+        //function create dictionary with playlist details and tunable track attribute values (if checked)
         function createFilterDict(){
             dict = {};
             dict['limit'] = document.getElementById("numTracksInput").value;
@@ -571,10 +589,10 @@
             return dict;
         }
 
-        //calls getPlaylist function with 500ms debounce, used as onchange funnction for numTracks
-        const processNumTracksChange = debounce(getPlaylist, 500);
+        //calls getPlaylist function with 275ms debounce, used as onchange funnction for numTracks
+        const processNumTracksChange = debounce(getPlaylist, 275);
 
-        //called when a tunable track attribute is enabled or diasbled
+        //function called when a tunable track attribute is enabled or diasbled
         //changes color of range input and calls getPlaylist() to update playlist
         function tunableTrackStatusChange(element){
             if(element.checked){
@@ -587,7 +605,7 @@
             }
         }
 
-        //called when tunable track input range slider or number input changes
+        //function called when tunable track input range slider or number input changes
         //if the attribute is enabled, then update playlist via getPlaylist()
         function tunableTrackInputChange(element){
             if(element.parentElement.parentElement.firstElementChild.lastElementChild.checked){
@@ -595,24 +613,37 @@
             }
         }
 
-        //calls tunableTrackInputChange function with 500ms debounce, used as onchange funnction for tunableTrackInput (number and range)
-        const processTunableTrackInputChange = debounce(tunableTrackInputChange, 500);
+        //calls tunableTrackInputChange function with 275ms debounce, used as onchange funnction for tunableTrackInput (number and range)
+        const processTunableTrackInputChange = debounce(tunableTrackInputChange, 275);
 
-        //sends a AJAX POST request to python code to update playlist name is session var
+        //function sends a AJAX POST request to python code to update playlist name is session var
+        //declare global variable to track if there is a previously active AJAX request
+        let playlistNameChangeRequest = null;
         function playlistNameChange(){
-            playlistName = document.getElementById("playlistName").value;
-            $.ajax({
+            let playlistName = document.getElementById("playlistName").value;
+            playlistNameChangeRequest = $.ajax({
                 method: "POST",
                 url: "{% url 'dashboard' %}",
                 data: {"playlistName": playlistName,
                         "action": "playlist-name-change",
                         "csrfmiddlewaretoken": "{{ csrf_token }}"
+                },
+                beforeSend : function()    {      
+                    //NOTE: this block executes before the request.
+                    //if there is a previous request, abort and continue with the current request         
+                    if(playlistNameChangeRequest != null) {
+                        playlistNameChangeRequest.abort();
+                        playlistNameChangeRequest = null;
+                    }
+                },
+                error: function(error){
+                        console.log("[ERROR]: "+error);
                 }
             });
         }
 
-        //calls playlistNameChange function with 500ms debounce, used as oninput funnction for playlistName
-        const processPlaylistNameChange = debounce(playlistNameChange, 500);
+        //calls playlistNameChange function with 275ms debounce, used as oninput funnction for playlistName
+        const processPlaylistNameChange = debounce(playlistNameChange, 275);
     </script>
 </body>
 </html>

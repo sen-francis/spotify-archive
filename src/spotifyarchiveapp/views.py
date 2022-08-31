@@ -85,7 +85,6 @@ def dashboard(request):
             return redirect(success)
     #handle non-login case
     if('fake_login' in request.session):
-        print('here')
         args['fake_login'] = True
         sp = spotipy.Spotify(auth_manager=client)
     else:
