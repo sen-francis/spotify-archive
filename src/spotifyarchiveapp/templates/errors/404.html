@@ -9,9 +9,9 @@
 <body>
     <div class="header">
     </div>
-    <main class="main" style="gap: 20px; padding: 20px;">
-        <h1 style="font-size: 5em;">404</h1>
-        <h2 style="font-size: 3em;">Page not found :(</h2>
+    <main class="main" id="error-main">
+        <h1 class="error-h1">404</h1>
+        <h2 class="error-h2">Page not found :(</h2>
         <form action="#" method="post">
             {% csrf_token %}
             <input id="error-button" type= "submit" name="error-redirect" value="Click here to return to home page."/>

@@ -9,11 +9,11 @@
 <body>
     <div class="header">
     </div>
-    <main class="main" style="gap: 20px; padding: 20px;">
-        <h1 style="font-size: 5em;">500</h1>
-        <h2 style="font-size: 3em;">Something went wrong :(</h2>
-        <p style="font-size: 1.5em; width:50%;">If you were redirected here after logging in, this likely means you are an unauthorized user. Due to Spotify's development policies, only a limited amount of users are authorized to use this application.</p>
-        <p style="font-size: 1.5em; width:50%;">If you believe you should be an authorized user, please contact the developer directly with your full name and email associated with your Spotify account. </p>
+    <main class="main" id="error-main">
+        <h1 class="error-h1">500</h1>
+        <h2 class="error-h2">Something went wrong :(</h2>
+        <p class="error-p">If you were redirected here after logging in, this likely means you are an unauthorized user. Due to Spotify's development policies, only a limited amount of users are authorized to use this application.</p>
+        <p class="error-p">If you believe you should be an authorized user, please contact the developer directly with your full name and email associated with your Spotify account. </p>
         <form action="#" method="post">
             {% csrf_token %}
             <input id="error-button" type= "submit" name="error-redirect" value="Click here to use application without login."/>

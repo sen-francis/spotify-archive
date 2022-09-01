@@ -600,6 +600,23 @@ input[type=number] {
     gap: 10px;
 }
 
+#error-main{
+    gap: 20px; 
+    padding: 20px;
+}
+
+.error-h1{
+    font-size: 5em;
+}
+
+.error-h2{
+    font-size: 3em;
+}
+
+.error-p{
+    font-size: 1.5em; 
+    width:50%;
+}
 #loading-spinner {
     border: 1rem solid #f3f3f3;
     border-top: 1rem solid green;
