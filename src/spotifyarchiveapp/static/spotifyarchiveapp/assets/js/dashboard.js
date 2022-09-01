@@ -232,12 +232,16 @@ function getPlaylist() {
 				document.getElementById("loading-spinner").style.display =
 					"inline-block";
 				document.getElementById("playlist-tracklist").style.opacity = "0.5";
+				//allow no pointer events while playlist updating
+				document.body.style.pointerEvents = "none";
 			},
 			success: function (data) {
 				updatePlaylist(data);
 				//once playlist is done updating, revert tracklist opacity and hide loading spinner
+				//allow pointer events again
 				document.getElementById("loading-spinner").style.display = "none";
 				document.getElementById("playlist-tracklist").style.opacity = "1";
+				document.body.style.pointerEvents = "auto";
 			},
 			error: function (error) {
 				console.log("[ERROR]: " + error);

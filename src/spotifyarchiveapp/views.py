@@ -252,3 +252,4 @@ def logout(request):
     request.session.pop('playlist-name', None)
     # return to home page
     return redirect(home)
+    
