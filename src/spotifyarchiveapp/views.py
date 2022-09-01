@@ -218,11 +218,9 @@ def success(request):
                 description += (t['name'] + ' by ' + t['artists'][0]['name'] + ', ')
         # check if user provides playlist name, else use default name
         if('playlist-name' in request.session):
-            playlist = sp.user_playlist_create(sp.current_user(
-            )['id'], request.session['playlist-name'], public=False, collaborative=False, description=description)
+            playlist = sp.user_playlist_create(sp.current_user()['id'], request.session['playlist-name'], public=False, collaborative=False, description=description)
         else:
-            playlist = sp.user_playlist_create(sp.current_user(
-            )['id'], 'Spotify Archive Playlist', public=False, collaborative=False, description=description)
+            playlist = sp.user_playlist_create(sp.current_user()['id'], 'Spotify Archive Playlist', public=False, collaborative=False, description=description)
         # add tracks to playlist
         tracks = [t['id'] for t in request.session['playlist-tracks']]
         sp.user_playlist_add_tracks(

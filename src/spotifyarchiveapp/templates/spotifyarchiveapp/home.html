@@ -14,11 +14,11 @@
             </form>
         </div>
         <main class="main">
-            <h1 style="text-align: center">Discover new music.</h1>
-            <h1 style="text-align: center">Generate personalized playlists.</h1>
-            <h1 style="text-align: center">Save to your Spotify library.</h1>
-            <div id="playlist-buttons" style="height: 100%; width: 100%">
-                <form action="#" method="post" id="playlist-buttons" style="height: 100%; width: 100%">
+            <h1>Discover new music.</h1>
+            <h1>Generate personalized playlists.</h1>
+            <h1>Save to your Spotify library.</h1>
+            <div class="home-buttons">
+                <form action="#" method="post" class="home-buttons">
                     {% csrf_token %}
                     <input class="log-in-big" name="log-in" type="submit" value="LOG IN" />
                     <input class="no-log-in-big" name="no-log-in" type="submit" value="CONTINUE WITHOUT LOGIN" />

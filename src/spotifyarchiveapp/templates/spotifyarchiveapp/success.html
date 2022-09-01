@@ -26,9 +26,9 @@
             </div>
         </div>
         <main class="main">
-            <h1 style="text-align: center;">Succesfully created a playlist just for you!</h1>
-            <h2 style="text-align: center;">Check your Spotify library to listen to your new playlist</h2>
-            <form name="createAnotherForm" action="#" method="post" style="display: flex; justify-content: center;"> 
+            <h1>Succesfully created a playlist just for you!</h1>
+            <h2 id="success-h2">Check your Spotify library to listen to your new playlist</h2>
+            <form id="create-another-form" name="createAnotherForm" action="#" method="post"> 
                 {% csrf_token %}
                 <input id="create-another" type="submit" name="create-another" value="CREATE ANOTHER" />
             </form>

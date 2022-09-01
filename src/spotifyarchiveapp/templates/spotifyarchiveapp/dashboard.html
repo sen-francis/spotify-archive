@@ -37,168 +37,168 @@
             <div id="filters">
                 <h3>Playlist Details</h3>
                 <hr/>
-                <p style="font-size: 0.9em;"> Playlist Name </p>
+                <p id="playlist-name"> Playlist Name </p>
                 <input type="text" id="playlistName" placeholder="Enter Playlist Name" oninput="processPlaylistNameChange()">
                 <hr/>
-                <p style="font-size: 0.9em;"> Number of Tracks </p>
-                <form style="display: flex; flex-direction: row; gap: 10px;">
+                <p id="num-tracks"> Number of Tracks </p>
+                <form id="num-tracks-form">
                     <input type="range" name="amountRange" min="1" max="100" value="50" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processNumTracksChange()" id="numTracksRange"/>
                     <input type="number" name="amountInput" min="1" max="100" value="50" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processNumTracksChange()" id="numTracksInput"/>
                 </form>
                 <hr/>
                 <h3> Tunable Track Attributes </h3>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px; width: 100%;">
-                    <div style="display: flex; flex-direction: row; gap: 10px; width: 100%;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Acousticness
                             <span class="tooltiptext">Confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic.</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="acousticCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="acousticInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Danceability
                             <span class="tooltiptext">Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is most danceable.</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="danceCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="danceInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Energy
                             <span class="tooltiptext">Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. For example, death metal has high energy, while a Bach prelude scores low on the scale. Perceptual features contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, and general entropy.</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="energyCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="energyInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Instrumentalness
                             <span class="tooltiptext">The closer the instrumentalness value is to 1.0, the greater likelihood the track contains no vocal content. Values above 0.5 are intended to represent instrumental tracks, but confidence is higher as the value approaches 1.0.</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="instrumentalCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="instrumentalInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Key
                             <span class="tooltiptext">The estimated overall key of the track. Integers map to pitches using standard Pitch Class notation . E.g. 0 = C, 1 = C#/Db, 2 = D, and so on.</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="keyCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="11" value="5" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="0" max="11" value="5" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="keyInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Liveness
                             <span class="tooltiptext">Detects the presence of an audience in the recording. Higher liveness values represent an increased probability that the track was performed live. A value above 0.8 provides strong likelihood that the track is live.</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="liveCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="liveInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Mode
                             <span class="tooltiptext">Mode indicates the modality (major or minor) of a track, the type of scale from which its melodic content is derived. Major is represented by 1 and minor is 0.</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="modeCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="0" max="1" value="0"  oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="modeInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Popularity
                             <span class="tooltiptext">The popularity of a track is a value between 0 and 100, with 100 being the most popular. The popularity is calculated by algorithm and is based, in the most part, on the total number of plays the track has had and how recent those plays are.</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="popularCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="100" value="50" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="0" max="100" value="50" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="popularInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Speechiness
                             <span class="tooltiptext">Speechiness detects the presence of spoken words in a track. The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 1.0 the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 0.33 and 0.66 describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 0.33 most likely represent music and other non-speech-like tracks.</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="speechCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="speechInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Tempo
                             <span class="tooltiptext">Overall estimated tempo of a track in beats per minute (BPM). In musical terminology, tempo is the speed or pace of a given piece and derives directly from the average beat duration.</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="tempoCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="1" max="300" value="150" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="1" max="300" value="150" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="tempoInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Time Signature
                             <span class="tooltiptext">An estimated time signature. The time signature (meter) is a notational convention to specify how many beats are in each bar (or measure). The time signature ranges from 3 to 7 indicating time signatures of "3/4", to "7/4".</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="timeSigCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="3" max="7" value="5" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="3" max="7" value="5"  oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="timeSigInput" class="tunableTracksInput"/>
                     </form>
                 </div>
                 <hr/>
-                <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                <div class="tunable-track-col">
+                    <div class="tunable-track-row">
                         <div class="tooltip">Valence
                             <span class="tooltiptext">Measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).</span>
                         </div>
                         <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="valenceCheck">
                     </div>
-                    <form style="display: flex; flex-direction: row; gap: 10px;">
+                    <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
                         <input type="number" name="amountInput" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountRange.value = this.form.amountInput.value;" onchange="processTunableTrackInputChange(this)" id="valenceInput" class="tunableTracksInput"/>
                     </form>
