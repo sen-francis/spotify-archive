@@ -1,40 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-  {% load static %}
-  <head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link
-      rel="stylesheet"
-      href="{% static 'spotifyarchiveapp/assets/css/main-style.css' %}"
-    />
-    <title>Spotify Archive</title>
-  </head>
-  <body>
-    <div class="header">
-      <form action="#" method="post">
-        {% csrf_token %}
-        <input class="log-in" name="log-in" type="submit" value="Log in" />
-      </form>
-    </div>
-    <main class="main">
-      <h1 style="text-align: center">Discover new music.</h1>
-      <h1 style="text-align: center">Generate personalized playlists.</h1>
-      <h1 style="text-align: center">Save to your Spotify library.</h1>
-      <div id="playlist-buttons" style="height: 100%; width: 100%;">
-        <form action="#" method="post" id="playlist-buttons" style="height: 100%; width: 100%;">
-            {% csrf_token %}
-            <input class="log-in-big" name="log-in" type="submit" value="LOG IN" />
-            <input class="no-log-in-big" name="no-log-in" type="submit" value="CONTINUE WITHOUT LOGIN" />
-        </form>
-      </div>
-    </main>
-    <footer class="footer">
-      <a id="github-logo" href="https://github.com/sen-francis/spotify-archive">
-        <img
-          id="light-logo"
-          src="{% static 'spotifyarchiveapp/assets/images/GitHub-Mark-Light-32px.png' %}"
-        />
-      </a>
-    </footer>
-  </body>
+    {% load static %}
+    <head>
+        <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{% static 'spotifyarchiveapp/assets/css/main-style.css' %}" />
+        <title>Spotify Archive</title>
+    </head>
+    <body>
+        <div class="header">
+            <form action="#" method="post">
+                {% csrf_token %}
+                <input class="log-in" name="log-in" type="submit" value="Log in" />
+            </form>
+        </div>
+        <main class="main">
+            <h1 style="text-align: center">Discover new music.</h1>
+            <h1 style="text-align: center">Generate personalized playlists.</h1>
+            <h1 style="text-align: center">Save to your Spotify library.</h1>
+            <div id="playlist-buttons" style="height: 100%; width: 100%">
+                <form action="#" method="post" id="playlist-buttons" style="height: 100%; width: 100%">
+                    {% csrf_token %}
+                    <input class="log-in-big" name="log-in" type="submit" value="LOG IN" />
+                    <input class="no-log-in-big" name="no-log-in" type="submit" value="CONTINUE WITHOUT LOGIN" />
+                </form>
+            </div>
+        </main>
+        <footer class="footer">
+            <a id="github-logo" href="https://github.com/sen-francis/spotify-archive">
+                <img id="light-logo" src="{% static 'spotifyarchiveapp/assets/images/GitHub-Mark-Light-32px.png' %}" />
+            </a>
+        </footer>
+    </body>
 </html>
