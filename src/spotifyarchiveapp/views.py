@@ -223,8 +223,10 @@ def success(request):
             playlist = sp.user_playlist_create(sp.current_user()['id'], 'Spotify Archive Playlist', public=False, collaborative=False, description=description)
         # add tracks to playlist
         tracks = [t['id'] for t in request.session['playlist-tracks']]
-        sp.user_playlist_add_tracks(
-            sp.current_user()['id'], playlist['id'], tracks, position=None)
+        #in case description is not saved
+        if playlist['description'] is None:
+            sp.user_playlist_change_details(sp.current_user()['id'], playlist['id'], description=description)
+        sp.user_playlist_add_tracks(sp.current_user()['id'], playlist['id'], tracks, position=None)
         # clear session cache
         request.session.pop('playlist-tracks', None)
         request.session.pop('selected-tracks', None)
