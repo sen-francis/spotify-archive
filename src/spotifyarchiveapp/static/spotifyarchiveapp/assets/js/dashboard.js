@@ -31,7 +31,7 @@ function debounce(func, wait, immediate) {
 //declare global variable to track if there is a previously active AJAX request
 let searchRequest = null;
 function search() {
-	if(static){
+	if(document.getElementById("static-button").style.color == "green"){
 		return;
 	}
 	let query = document.getElementById("search-bar").value;
@@ -84,7 +84,7 @@ function trackSelect(element) {
             //add track object to selected tracks div
             trackCreate(track, "selectTrack");
             //fetch a new recommendation playlist with updated tracks
-            if (!static) {
+            if (document.getElementById("static-button").style.color == "white") {
                 getPlaylist();
             } else {
                 playlistChanged = true;
@@ -113,7 +113,7 @@ function trackDeselect(element) {
             document.getElementById("selected-tracklist").removeChild(element);
             //if there are still selected tracks, fetch a new recommendation playlist
             if (document.getElementById("selected-tracklist").childElementCount > 0) {
-                if (!static) {
+                if (document.getElementById("static-button").style.color == "white") {
                     getPlaylist();
                 } else {
                     playlistChanged = true;
@@ -307,7 +307,7 @@ function createFilterDict() {
 const processNumTracksChange = debounce(numTracksChange, 275);
 
 function numTracksChange(){
-    if (!static) {
+    if (document.getElementById("static-button").style.color == "white") {
         getPlaylist();
     } else {
         playlistChanged = true;
@@ -322,7 +322,7 @@ function tunableTrackStatusChange(element) {
     } else {
         element.parentElement.parentElement.lastElementChild.firstElementChild.style.background = "darkgrey";
     }
-    if (!static) {
+    if (document.getElementById("static-button").style.color == "white") {
         getPlaylist();
     } else {
         playlistChanged = true;
@@ -333,7 +333,7 @@ function tunableTrackStatusChange(element) {
 //if the attribute is enabled, then update playlist via getPlaylist()
 function tunableTrackInputChange(element) {
     if (element.parentElement.parentElement.firstElementChild.lastElementChild.checked) {
-        if (!static) {
+        if (document.getElementById("static-button").style.color == "white") {
             getPlaylist();
         } else {
             playlistChanged = true;
@@ -375,8 +375,6 @@ function playlistNameChange() {
 //calls playlistNameChange function with 275ms debounce, used as oninput funnction for playlistName
 const processPlaylistNameChange = debounce(playlistNameChange, 275);
 
-let static = true;
-
 let playlistChanged = false;
 
 function staticClick() {
@@ -396,8 +394,6 @@ function staticClick() {
         success: function (data) {
 			document.getElementById("static-button").style.color = "green";
 			document.getElementById("dynamic-button").style.color = "white";
-			static = true;
-
 			document.getElementById("mode-buttons-div").style.pointerEvents = "auto";
         },
         error: function (error) {
@@ -423,8 +419,6 @@ function dynamicClick() {
         success: function (data) {
 			document.getElementById("dynamic-button").style.color = "green";
 			document.getElementById("static-button").style.color = "white";
-			static = false;
-
 			document.getElementById("mode-buttons-div").style.pointerEvents = "auto";
         },
         error: function (error) {

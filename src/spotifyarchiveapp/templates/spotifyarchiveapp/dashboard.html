@@ -216,14 +216,14 @@
                 </div>
             </div>   
             <div class="search-selection">
-                <form id="searchForm" name="searchForm" method="GET" action="#" onsubmit="search()">
+                <form id="searchForm" name="searchForm" method="GET" action="#">
                     {% csrf_token %}
                     {% if search_query %}
-                        <input type="text" name="search" id="search-bar" placeholder="Search for songs" value="{{ search_query }}" onkeyup="processSearch()">
+                        <input type="text" name="search" id="search-bar" placeholder="Search for songs" value="{{ search_query }}" onkeyup="processSearch()"/>
                     {% else %}
-                        <input type="text" name="search" id="search-bar" placeholder="Search for songs" onkeyup="processSearch()">
+                        <input type="text" name="search" id="search-bar" placeholder="Search for songs" onkeyup="processSearch()"/>
                     {% endif %}
-                    <input type="submit" hidden />
+                    <input type="submit"  onsubmit="search()" hidden/>
                 </form>
                 <div class ="track-list" id="search-tracklist">
                     {% if results %}
