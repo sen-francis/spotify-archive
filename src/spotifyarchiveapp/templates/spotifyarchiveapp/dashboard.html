@@ -218,7 +218,11 @@
             <div class="search-selection">
                 <form id="searchForm" name="searchForm" method="GET" action="#" onsubmit="search()">
                     {% csrf_token %}
-                    <input type="text" name="search" id="search-bar" placeholder="Search for songs" onkeyup="processSearch()">
+                    {% if search_query %}
+                        <input type="text" name="search" id="search-bar" placeholder="Search for songs" value="{{ search_query }}" onkeyup="processSearch()">
+                    {% else %}
+                        <input type="text" name="search" id="search-bar" placeholder="Search for songs" onkeyup="processSearch()">
+                    {% endif %}
                     <input type="submit" hidden />
                 </form>
                 <div class ="track-list" id="search-tracklist">

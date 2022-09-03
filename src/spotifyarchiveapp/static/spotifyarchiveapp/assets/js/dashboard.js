@@ -392,7 +392,6 @@ function staticClick() {
 		beforeSend: function () {
 			//allow no pointer events while playlist updating
 			document.getElementById("mode-buttons-div").style.pointerEvents = "none";
-			document.getElementById("mode-buttons-div").style.opacity = "0.5";
 		},
         success: function (data) {
 			document.getElementById("static-button").style.color = "green";
@@ -400,7 +399,6 @@ function staticClick() {
 			static = true;
 
 			document.getElementById("mode-buttons-div").style.pointerEvents = "auto";
-			document.getElementById("mode-buttons-div").style.opacity = "1";
         },
         error: function (error) {
             console.log("[ERROR]: " + error);
@@ -421,7 +419,6 @@ function dynamicClick() {
 		beforeSend: function () {
 			//allow no pointer events while playlist updating
 			document.getElementById("mode-buttons-div").style.pointerEvents = "none";
-			document.getElementById("mode-buttons-div").style.opacity = "0.5";
 		},
         success: function (data) {
 			document.getElementById("dynamic-button").style.color = "green";
@@ -429,7 +426,6 @@ function dynamicClick() {
 			static = false;
 
 			document.getElementById("mode-buttons-div").style.pointerEvents = "auto";
-			document.getElementById("mode-buttons-div").style.opacity = "1";
         },
         error: function (error) {
             console.log("[ERROR]: " + error);
