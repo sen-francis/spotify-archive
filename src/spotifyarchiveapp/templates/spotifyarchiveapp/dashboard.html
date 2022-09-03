@@ -3,7 +3,7 @@
     {% load static %}
     <head>
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" href="{% static 'spotifyarchiveapp/assets/css/main-style.css' %}">
+        <link rel="stylesheet" href="{% static 'spotifyarchiveapp/assets/css/main-style.css' %}"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="{% static 'spotifyarchiveapp/assets/js/dashboard.js' %}"></script>
         <title>Dashboard | Spotify Archive</title>
@@ -29,9 +29,9 @@
             {% else %}
                 <div id="display-user" class="button" onclick="dropdown()">
                     {% if avi_url %}
-                        <img id="display-img" src="{{avi_url}}">
+                        <img id="display-img" src="{{avi_url}}"/>
                     {% else %}
-                        <img id="display-img" src="{% static 'spotifyarchiveapp/assets/images/default_avi.jpg' %}">
+                        <img id="display-img" src="{% static 'spotifyarchiveapp/assets/images/default_avi.jpg' %}"/>
                     {% endif %}
                     <p id="display-name">{{display_name}}</p>
                     <p id="drop-arrow">&#9660</p>
@@ -39,7 +39,7 @@
                 <div id="drop-content">
                     <form name="logoutForm" method="POST" action="#">
                         {% csrf_token %}
-                        <input type="submit" name="logout" id="logout" value="Log out">
+                        <input type="submit" name="logout" id="logout" value="Log out"/>
                     </form>
                 </div>
             {% endif %}
@@ -49,7 +49,7 @@
                 <h3>Playlist Details</h3>
                 <hr/>
                 <p id="playlist-name"> Playlist Name </p>
-                <input type="text" id="playlistName" placeholder="Enter Playlist Name" oninput="processPlaylistNameChange()">
+                <input type="text" id="playlistName" placeholder="Enter Playlist Name" oninput="processPlaylistNameChange()"/>
                 <hr/>
                 <p id="num-tracks"> Number of Tracks </p>
                 <form id="num-tracks-form">
@@ -64,7 +64,7 @@
                         <div class="tooltip">Acousticness
                             <span class="tooltiptext">Confidence measure from 0.0 to 1.0 of whether the track is acoustic. 1.0 represents high confidence the track is acoustic.</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="acousticCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="acousticCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -77,7 +77,7 @@
                         <div class="tooltip">Danceability
                             <span class="tooltiptext">Danceability describes how suitable a track is for dancing based on a combination of musical elements including tempo, rhythm stability, beat strength, and overall regularity. A value of 0.0 is least danceable and 1.0 is most danceable.</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="danceCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="danceCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -90,7 +90,7 @@
                         <div class="tooltip">Energy
                             <span class="tooltiptext">Energy is a measure from 0.0 to 1.0 and represents a perceptual measure of intensity and activity. Typically, energetic tracks feel fast, loud, and noisy. For example, death metal has high energy, while a Bach prelude scores low on the scale. Perceptual features contributing to this attribute include dynamic range, perceived loudness, timbre, onset rate, and general entropy.</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="energyCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="energyCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -103,7 +103,7 @@
                         <div class="tooltip">Instrumentalness
                             <span class="tooltiptext">The closer the instrumentalness value is to 1.0, the greater likelihood the track contains no vocal content. Values above 0.5 are intended to represent instrumental tracks, but confidence is higher as the value approaches 1.0.</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="instrumentalCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="instrumentalCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -116,7 +116,7 @@
                         <div class="tooltip">Key
                             <span class="tooltiptext">The estimated overall key of the track. Integers map to pitches using standard Pitch Class notation . E.g. 0 = C, 1 = C#/Db, 2 = D, and so on.</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="keyCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="keyCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="11" value="5" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -129,7 +129,7 @@
                         <div class="tooltip">Liveness
                             <span class="tooltiptext">Detects the presence of an audience in the recording. Higher liveness values represent an increased probability that the track was performed live. A value above 0.8 provides strong likelihood that the track is live.</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="liveCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="liveCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -142,7 +142,7 @@
                         <div class="tooltip">Mode
                             <span class="tooltiptext">Mode indicates the modality (major or minor) of a track, the type of scale from which its melodic content is derived. Major is represented by 1 and minor is 0.</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="modeCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="modeCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -155,7 +155,7 @@
                         <div class="tooltip">Popularity
                             <span class="tooltiptext">The popularity of a track is a value between 0 and 100, with 100 being the most popular. The popularity is calculated by algorithm and is based, in the most part, on the total number of plays the track has had and how recent those plays are.</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="popularCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="popularCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="100" value="50" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -168,7 +168,7 @@
                         <div class="tooltip">Speechiness
                             <span class="tooltiptext">Speechiness detects the presence of spoken words in a track. The more exclusively speech-like the recording (e.g. talk show, audio book, poetry), the closer to 1.0 the attribute value. Values above 0.66 describe tracks that are probably made entirely of spoken words. Values between 0.33 and 0.66 describe tracks that may contain both music and speech, either in sections or layered, including such cases as rap music. Values below 0.33 most likely represent music and other non-speech-like tracks.</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="speechCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="speechCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -181,7 +181,7 @@
                         <div class="tooltip">Tempo
                             <span class="tooltiptext">Overall estimated tempo of a track in beats per minute (BPM). In musical terminology, tempo is the speed or pace of a given piece and derives directly from the average beat duration.</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="tempoCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="tempoCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="1" max="300" value="150" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -194,7 +194,7 @@
                         <div class="tooltip">Time Signature
                             <span class="tooltiptext">An estimated time signature. The time signature (meter) is a notational convention to specify how many beats are in each bar (or measure). The time signature ranges from 3 to 7 indicating time signatures of "3/4", to "7/4".</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="timeSigCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="timeSigCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="3" max="7" value="5" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -207,7 +207,7 @@
                         <div class="tooltip">Valence
                             <span class="tooltiptext">Measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).</span>
                         </div>
-                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="valenceCheck">
+                        <input type="checkbox" class="toggle" onchange="tunableTrackStatusChange(this)" id="valenceCheck"/>
                     </div>
                     <form class="tunable-track-form">
                         <input type="range" name="amountRange" min="0" max="1" value="0.5" step="0.1" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processTunableTrackInputChange(this)" class="tunableTracksRange"/>
@@ -229,8 +229,8 @@
                     {% if results %}
                         {% for track in results.tracks.items %}
                             <button class ="track" type="submit" onclick="trackSelect(this)">
-                                <input type="hidden" name="track-id" id="track-id" value="{{track.id}}">
-                                <img class="track-img" src="{{track.album.images.0.url}}">
+                                <input type="hidden" name="track-id" id="track-id" value="{{track.id}}"/>
+                                <img class="track-img" src="{{track.album.images.0.url}}"/>
                                 <div class="track-title">
                                     <p>{{track.name}}</p>
                                     <div class="track-artists">
@@ -252,8 +252,8 @@
                         {% if selected %}
                             {% for track in selected %}
                                 <button class ="track" type="submit" onclick="trackDeselect(this)">
-                                    <input type="hidden" name="trackDeselectID" id="trackDeselectID" value="{{track.id}}">
-                                    <img class="track-img" src="{{track.album.images.0.url}}">
+                                    <input type="hidden" name="trackDeselectID" id="trackDeselectID" value="{{track.id}}"/>
+                                    <img class="track-img" src="{{track.album.images.0.url}}"/>
                                     <div class="track-title">
                                         <p>{{track.name}}</p>
                                         <div class="track-artists">
@@ -277,8 +277,8 @@
                     {% if playlist %}
                         {% for track in playlist %}
                             <button class ="playlist-track" type="submit">
-                                <input type="hidden" id="trackID" value="{{track.id}}">
-                                <img class="track-img" src="{{track.album.images.0.url}}">
+                                <input type="hidden" id="trackID" value="{{track.id}}"/>
+                                <img class="track-img" src="{{track.album.images.0.url}}"/>
                                 <div class="track-title">
                                     <p>{{track.name}}</p>
                                     <div class="track-artists">
@@ -298,14 +298,14 @@
                 <div id="loading-spinner"></div>
                 <div id="playlist-buttons">
                     {% if mode == "static" %}
-                        <input class = "submit" name="seedButton" type="submit" value="Generate Playlist" onclick="getPlaylist()">
+                        <input class = "submit" name="seedButton" type="submit" value="Generate Playlist" onclick="getPlaylist()"/>
                     {% else %}
-                        <input class = "submit" name="reSeedButton" type="submit" value="Regenerate Playlist" onclick="getPlaylist()">
+                        <input class = "submit" name="reSeedButton" type="submit" value="Regenerate Playlist" onclick="getPlaylist()"/>
                     {% endif %}
                     {% if not fake_login %}
                         <form id="submitForm" method="POST" action="#">
                             {% csrf_token %}
-                            <input class = "submit" name="submitButton" type="submit" value="Create Playlist">
+                            <input class = "submit" name="submitButton" type="submit" value="Create Playlist"/>
                         </form>
                     {% endif %}    
                 </div>
@@ -313,7 +313,7 @@
         </div>
         <div class="footer">
             <a id="github-logo" href="https://github.com/sen-francis/spotify-archive">
-                <img id="light-logo" src="{% static 'spotifyarchiveapp/assets/images/GitHub-Mark-Light-32px.png' %}">
+                <img id="light-logo" src="{% static 'spotifyarchiveapp/assets/images/GitHub-Mark-Light-32px.png' %}"/>
             </a>
         </div>
     </body>
