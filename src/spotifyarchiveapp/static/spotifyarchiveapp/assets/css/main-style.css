@@ -646,3 +646,30 @@ input[type=number] {
         transform: rotate(360deg);
     }
 }
+
+.mode-buttons{
+    font-family: Gotham;
+    font-weight: bold;
+    font-size: 3rem;
+    background-color: transparent;
+    color: white;
+    border: none;
+    left: 2.5%;
+}
+
+.mode-buttons:hover{
+    color: gray;
+    cursor: pointer;
+}
+
+#slash-header{
+    font-size: 3rem;
+    color: white;
+}
+
+#mode-buttons-div{
+    display: flex;
+    flex-direction: row;
+    margin-right: auto;
+    padding-left: 1.25rem;
+}

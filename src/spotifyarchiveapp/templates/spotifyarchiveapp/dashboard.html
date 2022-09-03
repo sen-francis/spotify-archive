@@ -10,6 +10,17 @@
     </head>
     <body>
         <div class="header">
+            <div id="mode-buttons-div">
+                {% if mode == "static" %}
+                    <button id="static-button" class="mode-buttons" type="button" onclick="staticClick()" style="color: green;">Static</button>
+                    <p id="slash-header">/</p>
+                    <button id="dynamic-button" class="mode-buttons" type="button" onclick="dynamicClick()" style="color: white;">Dynamic</button>
+                {% else %} 
+                    <button id="static-button" class="mode-buttons" type="button" onclick="staticClick()" style="color: white;">Static</button>
+                    <p id="slash-header">/</p>
+                    <button id="dynamic-button" class="mode-buttons" type="button" onclick="dynamicClick()" style="color: green;">Dynamic</button>
+                {% endif %}
+            </div>
             {% if fake_login %}
                 <form action="#" method="post">
                     {% csrf_token %}
@@ -205,14 +216,15 @@
                 </div>
             </div>   
             <div class="search-selection">
-                <form id="searchForm" name="searchForm" method="GET" action="#">
+                <form id="searchForm" name="searchForm" method="GET" action="#" onsubmit="search()">
                     {% csrf_token %}
                     <input type="text" name="search" id="search-bar" placeholder="Search for songs" onkeyup="processSearch()">
+                    <input type="submit" hidden />
                 </form>
                 <div class ="track-list" id="search-tracklist">
                     {% if results %}
                         {% for track in results.tracks.items %}
-                            <button class ="track" type="submit">
+                            <button class ="track" type="submit" onclick="trackSelect(this)">
                                 <input type="hidden" name="track-id" id="track-id" value="{{track.id}}">
                                 <img class="track-img" src="{{track.album.images.0.url}}">
                                 <div class="track-title">
@@ -281,7 +293,11 @@
                 </div>
                 <div id="loading-spinner"></div>
                 <div id="playlist-buttons">
-                    <input class = "submit" name="reSeedButton" type="submit" value="Regenerate Playlist" onclick="getPlaylist()">
+                    {% if mode == "static" %}
+                        <input class = "submit" name="seedButton" type="submit" value="Generate Playlist" onclick="getPlaylist()">
+                    {% else %}
+                        <input class = "submit" name="reSeedButton" type="submit" value="Regenerate Playlist" onclick="getPlaylist()">
+                    {% endif %}
                     {% if not fake_login %}
                         <form id="submitForm" method="POST" action="#">
                             {% csrf_token %}

@@ -83,6 +83,13 @@ def dashboard(request):
     if('submitButton' in request.POST):
         if ('selected-tracks' in request.session and len(request.session['selected-tracks']) != 0):
             return redirect(success)
+    #handle static search
+    if('search' in request.GET):
+        # get search query if exists and use spotipy search call to get results
+        query = request.GET.get('search', None)
+        if(query):
+            results = sp.search(q=query, limit=10, type='track,artist')
+            args['results'] =  results
     #handle non-login case
     if('fake_login' in request.session):
         args['fake_login'] = True
@@ -171,6 +178,9 @@ def dashboard(request):
             request.session['playlist-name'] = request.POST.get(
                 'playlistName', None)
             return HttpResponse('')
+        # handle AJAX website mode change request
+        if(request.POST.get('action') == 'mode-change'):
+            request.session['mode'] = request.POST.get('mode')
     # fill args dict with user info to be displayed in top right
     if user is not None:
         args['display_name'] = user['display_name']
@@ -198,6 +208,10 @@ def dashboard(request):
                 for t in recs['tracks']:
                     request.session['playlist-tracks'].append(t)
                 args['playlist'] = request.session['playlist-tracks']
+    if('mode' in request.session):
+        args['mode'] = request.session['mode']
+    else:
+        args['mode'] = 'static'
     return render(request, 'spotifyarchiveapp/dashboard.html', args)
 
 # view for website success page
@@ -223,14 +237,9 @@ def success(request):
             playlist = sp.user_playlist_create(sp.current_user()['id'], 'Spotify Archive Playlist', public=False, collaborative=False, description=description)
         # add tracks to playlist
         tracks = [t['id'] for t in request.session['playlist-tracks']]
-        #in case description is not saved
-        if playlist['description'] is None:
-            sp.user_playlist_change_details(sp.current_user()['id'], playlist['id'], description=description)
         sp.user_playlist_add_tracks(sp.current_user()['id'], playlist['id'], tracks, position=None)
-        # clear session cache
-        request.session.pop('playlist-tracks', None)
-        request.session.pop('selected-tracks', None)
-        request.session.pop('playlist-name', None)
+        # clear session vars
+        request.session.flush()
     # needed in case user tries to access success page too early (redirects home in this case)
     try:
         # prepare args so that user icon and name is displayed in top right
@@ -249,9 +258,7 @@ def logout(request):
     # remove cache and session vars
     if os.path.exists('.spotipyoauthcache'):
         os.remove('.spotipyoauthcache')
-    request.session.pop('playlist-tracks', None)
-    request.session.pop('selected-tracks', None)
-    request.session.pop('playlist-name', None)
+    request.session.flush()
     # return to home page
     return redirect(home)
     
