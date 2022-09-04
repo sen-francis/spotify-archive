@@ -303,9 +303,9 @@
                 <div id="loading-spinner"></div>
                 <div id="playlist-buttons">
                     {% if mode == "static" %}
-                        <input class = "submit" name="seedButton" type="submit" value="Generate Playlist" onclick="getPlaylist()"/>
+                        <input id="generate-playlist-button" class="submit" name="seedButton" type="submit" value="Generate Playlist" onclick="getPlaylist()"/>
                     {% else %}
-                        <input class = "submit" name="reSeedButton" type="submit" value="Regenerate Playlist" onclick="getPlaylist()"/>
+                        <input id="generate-playlist-button" class="submit" name="seedButton" type="submit" value="Regenerate Playlist" onclick="getPlaylist()"/>
                     {% endif %}
                     {% if not fake_login %}
                         <form id="submitForm" method="POST" action="#">

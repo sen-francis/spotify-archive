@@ -16,30 +16,58 @@
 **Test:**  Use Github button on home page.  
 **Expected Result:** User is redirected to Github repository. 
 
-### Static Tests
-## Test Case 
-**Test:**  Static search on enter
-**Expected Result:** 
+## Test Case 5
+**Test:**  While in static mode, write a search query in the search bar and press enter.  
+**Expected Result:** Before user presses enter, no results show up. After pressing enter, 10 search results appear for users query.
 
-### Dynamic Tests
+## Test Case 6
+**Test:**  While in static mode, select some tracks.   
+**Expected Result:** Selected tracks show up in Current Selection section. Indicator that playlist is not updated appears.
 
-### Create Playlist
-## Test Case 
-**Test:**  Create a playlist with 4 seed songs with no name.
-**Expected Result:** 
+## Test Case 7
+**Test:**  While in static mode, when playlist is not updated indicator is visible, generate the playlist.  
+**Expected Result:** After clicking generate button, playlist is generated and indicator that playlist is not updated disappears.
 
-## Test Case 
-**Test:**  Create a playlist with 5 seed songs with name.
-**Expected Result:** 
+## Test Case 8
+**Test:**  While in static mode, when playlist is not updated indicator is hidden, modify the tunable track attributes.  
+**Expected Result:** Indicator that playlist is not updated appears.  
 
-## Test Case 
-**Test:**  Create a 100 song playlist
-**Expected Result:** 
+## Test Case 9
+**Test:**  While in static mode, when playlist is not updated indicator is hidden, modify the playlist length.  
+**Expected Result:** Indicator that playlist is not updated appears.  
 
-## Test Case 
-**Test:**  Create a playlist with various tunable track attributes
-**Expected Result:** 
+## Test Case 10
+**Test:**  While in dynamic mode, write a search query in the search bar.  
+**Expected Result:** Search results should appear and update while user is typing.
 
-## Test Case 
-**Test:**  Regenerate playlist
-**Expected Result:** 
+## Test Case 11
+**Test:**  While in dynamic mode, select some tracks.   
+**Expected Result:** Selected tracks show up in Current Selection section. Generated playlist should update accordingly.
+
+## Test Case 12
+**Test:**  While in dynamic mode, click the regenerate playlist button.  
+**Expected Result:** Playlist is regenerated.  
+
+## Test Case 13
+**Test:**  While in dynamic mode, modify the tunable track attributes.  
+**Expected Result:** Generated playlist should update accordingly. 
+
+## Test Case 14
+**Test:**  While in dynamic mode, modify the playlist length.  
+**Expected Result:** Generated playlist should update accordingly. 
+
+## Test Case 15
+**Test:**  Create a playlist with 4 seed songs with no name.  
+**Expected Result:** Playlist should appear in user's Spotify library as "Spotify Archive". Description of playlist should include seed track names. Success page is shown.  
+
+## Test Case 16
+**Test:**  Create a playlist with 5 seed songs with name.  
+**Expected Result:** Playlist should appear in user's Spotify library as chosen name. Description of playlist should include seed track names. Success page is shown.  
+
+## Test Case 17
+**Test:**  Create a 100 song playlist.  
+**Expected Result:** 100 song playlist should appear in user's Spotify library. Success page is shown.  
+
+## Test Case 18
+**Test:**  Create a playlist with various tunable track attributes enabled.  
+**Expected Result:** Playlist should appear in user's Spotify library. Success page is shown.  

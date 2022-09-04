@@ -260,10 +260,7 @@ def dashboardHTTP(request, args):
         return redirect(auth_url)
     # handle create playlist
     if "submitButton" in request.POST:
-        if (
-            "selected-tracks" in request.session
-            and len(request.session["selected-tracks"]) != 0
-        ):
+        if "playlist-tracks" in request.session and len(request.session["playlist-tracks"]) != 0 :
             return redirect(success)
     # handle static search
     if "search" in request.GET:

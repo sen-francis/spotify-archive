@@ -393,6 +393,7 @@ function staticClick() {
         success: function (data) {
 			document.getElementById("static-button").style.color = "green";
 			document.getElementById("dynamic-button").style.color = "white";
+            document.getElementById("generate-playlist-button").value = "Generate Playlist";
 			document.getElementById("mode-buttons-div").style.pointerEvents = "auto";
         },
         error: function (error) {
@@ -418,8 +419,9 @@ function dynamicClick() {
         success: function (data) {
 			document.getElementById("dynamic-button").style.color = "green";
 			document.getElementById("static-button").style.color = "white";
+            document.getElementById("generate-playlist-button").value = "Regenerate Playlist";
+            document.getElementById("playlist-not-updated").style.visibility = "hidden";
 			document.getElementById("mode-buttons-div").style.pointerEvents = "auto";
-			document.getElementById("playlist-not-updated").style.visibility = "hidden";
 			getPlaylist();
         },
         error: function (error) {
