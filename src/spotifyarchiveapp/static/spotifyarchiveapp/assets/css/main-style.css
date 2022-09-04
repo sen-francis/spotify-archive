@@ -485,7 +485,7 @@ input[type=number] {
 .tooltip .tooltiptext {
     visibility: hidden;
     width: 9.375vw;
-    background-color: darkgray;
+    background-color: gray;
     color: #fff;
     padding: 0.313rem;
     border-radius: 0.313rem;
@@ -645,4 +645,45 @@ input[type=number] {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.mode-buttons{
+    font-family: Gotham;
+    font-weight: bold;
+    font-size: 3rem;
+    background-color: transparent;
+    color: white;
+    border: none;
+    left: 2.5%;
+}
+
+.mode-buttons:hover{
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+#slash-header{
+    font-size: 3rem;
+    color: white;
+}
+
+#mode-buttons-div{
+    display: flex;
+    flex-direction: row;
+    margin-right: auto;
+    padding-left: 1.25rem;
+}
+
+#playlist-not-updated{
+    font-size: 1.5rem;
+    color: red;
+    margin-top: auto;
+    margin-bottom: auto;
+    visibility: hidden;
+}
+
+#gen-playlist-header-div{
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
 }
