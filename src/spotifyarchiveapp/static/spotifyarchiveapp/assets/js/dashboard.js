@@ -87,7 +87,7 @@ function trackSelect(element) {
             if (document.getElementById("static-button").style.color == "white") {
                 getPlaylist();
             } else {
-                playlistChanged = true;
+				document.getElementById("playlist-not-updated").style.visibility = "visible";
             }
         },
         error: function (error) {
@@ -116,7 +116,7 @@ function trackDeselect(element) {
                 if (document.getElementById("static-button").style.color == "white") {
                     getPlaylist();
                 } else {
-                    playlistChanged = true;
+					document.getElementById("playlist-not-updated").style.visibility = "visible";
                 }
             } else {
                 //clear recommended playlist section
@@ -124,6 +124,7 @@ function trackDeselect(element) {
                 while (playlist.hasChildNodes()) {
                     playlist.removeChild(playlist.firstChild);
                 }
+				document.getElementById("playlist-not-updated").style.visibility = "hidden";
             }
         },
         error: function (error) {
@@ -251,7 +252,7 @@ function getPlaylist() {
                 document.getElementById("loading-spinner").style.display = "none";
                 document.getElementById("playlist-tracklist").style.opacity = "1";
                 document.body.style.pointerEvents = "auto";
-				playlistChanged = false;
+				document.getElementById("playlist-not-updated").style.visibility = "hidden";
             },
             error: function (error) {
                 console.log("[ERROR]: " + error);
@@ -310,7 +311,7 @@ function numTracksChange(){
     if (document.getElementById("static-button").style.color == "white") {
         getPlaylist();
     } else {
-        playlistChanged = true;
+		document.getElementById("playlist-not-updated").style.visibility = "visible";
     }
 }
 
@@ -325,7 +326,7 @@ function tunableTrackStatusChange(element) {
     if (document.getElementById("static-button").style.color == "white") {
         getPlaylist();
     } else {
-        playlistChanged = true;
+		document.getElementById("playlist-not-updated").style.visibility = "visible";
     }
 }
 
@@ -336,7 +337,7 @@ function tunableTrackInputChange(element) {
         if (document.getElementById("static-button").style.color == "white") {
             getPlaylist();
         } else {
-            playlistChanged = true;
+			document.getElementById("playlist-not-updated").style.visibility = "visible";
         }
     }
 }
@@ -374,8 +375,6 @@ function playlistNameChange() {
 
 //calls playlistNameChange function with 275ms debounce, used as oninput funnction for playlistName
 const processPlaylistNameChange = debounce(playlistNameChange, 275);
-
-let playlistChanged = false;
 
 function staticClick() {
 	const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
@@ -420,6 +419,8 @@ function dynamicClick() {
 			document.getElementById("dynamic-button").style.color = "green";
 			document.getElementById("static-button").style.color = "white";
 			document.getElementById("mode-buttons-div").style.pointerEvents = "auto";
+			document.getElementById("playlist-not-updated").style.visibility = "hidden";
+			getPlaylist();
         },
         error: function (error) {
             console.log("[ERROR]: " + error);

@@ -673,3 +673,17 @@ input[type=number] {
     margin-right: auto;
     padding-left: 1.25rem;
 }
+
+#playlist-not-updated{
+    font-size: 1.5rem;
+    color: red;
+    margin-top: auto;
+    margin-bottom: auto;
+    visibility: hidden;
+}
+
+#gen-playlist-header-div{
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+}

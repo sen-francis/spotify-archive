@@ -48,9 +48,11 @@
             <div id="filters">
                 <h3>Playlist Details</h3>
                 <hr/>
-                <p id="playlist-name"> Playlist Name </p>
-                <input type="text" id="playlistName" placeholder="Enter Playlist Name" oninput="processPlaylistNameChange()"/>
-                <hr/>
+                {% if not fake_login %}
+                    <p id="playlist-name"> Playlist Name </p>
+                    <input type="text" id="playlistName" placeholder="Enter Playlist Name" oninput="processPlaylistNameChange()"/>
+                    <hr/>
+                {% endif %}
                 <p id="num-tracks"> Number of Tracks </p>
                 <form id="num-tracks-form">
                     <input type="range" name="amountRange" min="1" max="100" value="50" oninput="this.form.amountInput.value = this.form.amountRange.value;" onchange="processNumTracksChange()" id="numTracksRange"/>
@@ -272,7 +274,10 @@
                     </div>
             </div>
             <div class="search-selection">
-                <h2 id="selection-header"> Generated Playlist </h2>
+                <div id="gen-playlist-header-div">
+                    <h2 id="selection-header"> Generated Playlist </h2>
+                    <h2 id="playlist-not-updated">(Playlist not updated)</h2>
+                </div>
                 <div class ="gen-track-list" id="playlist-tracklist">
                     {% if playlist %}
                         {% for track in playlist %}
