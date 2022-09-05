@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" href="{% static 'spotifyarchiveapp/assets/css/main-style.css' %}"/>
-        <script src="{% static 'spotifyarchiveapp/assets/js/success.js' %}"></script>
+        <script src="{% static 'spotifyarchiveapp/assets/js/stats.js' %}"></script>
         <title>Spotify Archive</title>
     </head>
     <body>
@@ -29,12 +29,14 @@
             </div>
         </div>
         <main class="main">
-            <h1>Succesfully created a playlist just for you!</h1>
-            <h2 id="success-h2">Check your Spotify library to listen to your new playlist</h2>
-            <form id="create-another-form" name="createAnotherForm" action="#" method="post"> 
-                {% csrf_token %}
-                <input id="create-another" type="submit" name="create-another" value="CREATE ANOTHER" />
-            </form>
+            {% if user_exists %}
+                <h1>Welcome back {{display_name}}!</h1>
+                <h2>With the help of Spotify Archive, you have discovered {{num_songs}} songs.</h2>
+                <h2>Revist your {{num_playlists}} custom playlists below.</h2>
+            {% else %}
+                <h1>Hi {{display_name}}!</h1>
+                <h2>It looks like you have not created any playlists yet. Please create some to view your stats!</h2>
+            {% endif %}     
         </main>
         <footer class="footer">
             <a id="github-logo" href="https://github.com/sen-francis/spotify-archive">

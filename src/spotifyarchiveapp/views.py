@@ -1,4 +1,5 @@
 from audioop import reverse
+from enum import unique
 from logging import raiseExceptions
 from random import seed
 from django.shortcuts import render, HttpResponseRedirect, redirect
@@ -8,6 +9,8 @@ import spotipy.util as util
 from spotipy import oauth2
 from spotipy.oauth2 import SpotifyClientCredentials
 import os
+from .models import User
+import datetime
 
 # configure Spotipy API for either client credentials or authorization depending on flow
 def initSpotipy(flow):
@@ -78,7 +81,12 @@ def home(request):
 def dashboard(request):
     global sp
     args = {}
-    # handle http requests
+    # handle dropdown http requests
+    if "dashboard" not in request.POST:
+        http = dropdownHTTP(request)
+        if http is not None:
+            return http
+    # handle dashboard http requests
     http = dashboardHTTP(request, args)
     if http is not None:
         return http
@@ -107,9 +115,10 @@ def dashboard(request):
 
 # view for website success page
 def success(request):
-    # handle button presses
-    if "logout" in request.POST:
-        return logout(request)
+    # handle dropdown http requests
+    http = dropdownHTTP(request)
+    if http is not None:
+        return http
     if "create-another" in request.POST:
         return redirect(dashboard)
     # create playlist in user's Spotify library
@@ -143,6 +152,14 @@ def success(request):
         sp.user_playlist_add_tracks(
             sp.current_user()["id"], playlist["id"], tracks, position=None
         )
+
+        # add user to db if dne or update playlist and unique song count here
+        try:
+            stats = User.objects.get(user_name=sp.current_user()["id"])
+            stats.playlists.append(playlist["id"])
+            stats.save()
+        except User.DoesNotExist:
+            User.objects.create(user_name=sp.current_user()["id"], join_date=datetime.date.today(), playlists = [playlist["id"]])
         # clear session vars
         request.session.flush()
     # needed in case user tries to access success page too early (redirects home in this case)
@@ -158,6 +175,47 @@ def success(request):
     except:
         return redirect(home)
 
+def stats(request):
+    # handle dropdown http requests
+    if "stats" not in request.POST:
+        http = dropdownHTTP(request)
+        if http is not None:
+            return http
+    # needed in case user tries to access success page too early (redirects home in this case)
+    try:
+        # prepare args so that user icon and name is displayed in top right
+        args = {}
+        user = sp.current_user()
+        args["display_name"] = user["display_name"]
+        # check if any avi exists
+        if len(user["images"]) > 0:
+            args["avi_url"] = user["images"][0]["url"]
+        try:
+            stats = User.objects.get(user_name=user["id"])
+            args["user_exists"] = True
+            playlists = []
+            updatedPlaylistIds = []
+            tracks = set()
+            for playlist in stats.playlists:
+                #print(playlist)
+                try:
+                    curr = sp.playlist(playlist)
+                    playlists.append(curr)
+                    updatedPlaylistIds.append(playlist)
+                    for track in curr["tracks"]["items"]:
+                        tracks.add(track["track"]["id"])
+                except:
+                    #playlist dne remove
+                    pass
+            stats.playlists = updatedPlaylistIds
+            stats.save()  
+            args["num_songs"] = len(tracks)
+            args["num_playlists"] = len(updatedPlaylistIds)
+        except User.DoesNotExist:
+            args["user_exists"] = False
+        return render(request, "spotifyarchiveapp/stats.html", args)
+    except:
+        return redirect(home)
 
 # function to that performs logout
 def logout(request):
@@ -248,9 +306,6 @@ def dashboardAJAX(request, user):
 
 
 def dashboardHTTP(request, args):
-    # handle logout
-    if "logout" in request.POST:
-        return logout(request)
     # handle login
     if "log-in" in request.POST:
         if "fake_login" in request.session:
@@ -271,7 +326,6 @@ def dashboardHTTP(request, args):
             args["results"] = results
             args["search_query"] = query
         return None
-
 
 def dashboardFillArgs(request, user, args):
     if user is not None:
@@ -306,3 +360,17 @@ def dashboardFillArgs(request, user, args):
         args["mode"] = request.session["mode"]
     else:
         args["mode"] = "static"
+
+def dropdownHTTP(request):
+    #handle dashboard
+    if "dashboard" in request.POST:
+        return redirect(dashboard)
+    #handle stats
+    if "stats" in request.POST:
+        return redirect(stats)
+    # handle logout
+    if "logout" in request.POST:
+        return logout(request)
+    # return None if not handling any of above requests
+    return None
+    
