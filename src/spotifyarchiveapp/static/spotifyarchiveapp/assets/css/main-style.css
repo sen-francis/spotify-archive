@@ -565,11 +565,11 @@ input[type=number] {
 }
 
 #playlist-name{
-    font-size: 0.9em;
+    font-size: 0.9rem;
 }
 
 #num-tracks{
-    font-size: 0.9em;
+    font-size: 0.9rem;
 }
 
 #num-tracks-form{
@@ -604,15 +604,16 @@ input[type=number] {
 }
 
 .error-h1{
-    font-size: 5em;
+    font-size: 5rem;
+    text-align: left;
 }
 
 .error-h2{
-    font-size: 3em;
+    font-size: 3rem;
 }
 
 .error-p{
-    font-size: 1.5em; 
+    font-size: 1.5rem; 
     width:50%;
 }
 
@@ -794,4 +795,32 @@ input[type=number] {
 .playlist-description{
     font-size: 1rem;
     color: darkgray
+}
+
+#error-stats-main{
+    gap: 20px; 
+    padding: 20px;
+}
+
+.error-stats-h1{
+    font-size: 4rem;
+    text-align: left;
+}
+
+.error-stats-h2{
+    font-size: 2rem;
+}
+
+#error-stats-button {
+    border: none;
+    font-family: Gotham;
+    font-weight: bold;
+    font-size: 2rem;
+    background-color: #101010;
+    color: green;
+    cursor: pointer;
+}
+
+#error-stats-button:hover {
+    color: darkgreen;
 }
