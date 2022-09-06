@@ -706,10 +706,6 @@ input[type=number] {
     flex-direction: row;
 }
 
-#user-name{
-    color: green;
-}
-
 #stats-date {
     margin-top: auto;
     margin-bottom: auto;
