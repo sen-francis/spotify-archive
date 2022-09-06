@@ -1,11 +1,6 @@
-from audioop import reverse
-from enum import unique
-from logging import raiseExceptions
-from random import seed
-from django.shortcuts import render, HttpResponseRedirect, redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 import spotipy
-import spotipy.util as util
 from spotipy import oauth2
 from spotipy.oauth2 import SpotifyClientCredentials
 import os
@@ -35,13 +30,11 @@ def initSpotipy(flow):
             client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET
         )
 
-
 # view for 404 page
 def page_not_found(request, exception):
     if "error-redirect" in request.POST:
         return redirect(home)
     return render(request, "errors/404.html", {})
-
 
 # view for 500 page
 def error(request, exception=None):
@@ -53,7 +46,6 @@ def error(request, exception=None):
         request.session["fake_login"] = "True"
         return redirect(dashboard)
     return render(request, "errors/500.html", {})
-
 
 # view for website home
 def home(request):
@@ -75,7 +67,6 @@ def home(request):
         request.session["fake_login"] = "True"
         return redirect(dashboard)
     return render(request, "spotifyarchiveapp/home.html")
-
 
 # view for website dashboard
 def dashboard(request):
@@ -112,7 +103,6 @@ def dashboard(request):
     dashboardFillArgs(request, user, args)
     return render(request, "spotifyarchiveapp/dashboard.html", args)
 
-
 # view for website success page
 def success(request):
     # handle dropdown http requests
@@ -127,9 +117,11 @@ def success(request):
         description = "Playlist created using Spotify Archive. Seed Tracks: "
         for ind, t in enumerate(request.session["selected-tracks"]):
             if ind == len(request.session["selected-tracks"]) - 1:
-                description += t["name"] + " by " + t["artists"][0]["name"] + "."
+                description += t["name"] + " by " + \
+                    t["artists"][0]["name"] + "."
             else:
-                description += t["name"] + " by " + t["artists"][0]["name"] + ", "
+                description += t["name"] + " by " + \
+                    t["artists"][0]["name"] + ", "
         # check if user provides playlist name, else use default name
         if "playlist-name" in request.session:
             playlist = sp.user_playlist_create(
@@ -153,13 +145,14 @@ def success(request):
             sp.current_user()["id"], playlist["id"], tracks, position=None
         )
 
-        # add user to db if dne or update playlist and unique song count here
+        # add user to db if dne or if user exists add new playlist id to current list
         try:
             stats = User.objects.get(user_name=sp.current_user()["id"])
             stats.playlists.append(playlist["id"])
             stats.save()
         except User.DoesNotExist:
-            User.objects.create(user_name=sp.current_user()["id"], join_date=datetime.date.today(), playlists = [playlist["id"]])
+            User.objects.create(user_name=sp.current_user()[
+                                "id"], join_date=datetime.date.today(), playlists=[playlist["id"]])
         # clear session vars
         request.session.flush()
     # needed in case user tries to access success page too early (redirects home in this case)
@@ -175,13 +168,15 @@ def success(request):
     except:
         return redirect(home)
 
+# view for website stats page
 def stats(request):
     # handle dropdown http requests
     if "stats" not in request.POST:
         http = dropdownHTTP(request)
         if http is not None:
             return http
-    if "error-redirect" in request.POST:
+    # handle dashboard redirect button
+    if "dashboard-redirect" in request.POST:
         return redirect(dashboard)
     # needed in case user tries to access success page too early (redirects home in this case)
     try:
@@ -192,14 +187,21 @@ def stats(request):
         # check if any avi exists
         if len(user["images"]) > 0:
             args["avi_url"] = user["images"][0]["url"]
+        # check if user exists in db (this means user has created playlists with app before)
         try:
+            # fetch user from db
             stats = User.objects.get(user_name=user["id"])
             args["user_exists"] = True
             args["join_date"] = stats.join_date.strftime("%B %d, %Y")
+            # store playlist objects for args
             playlists = []
+            # store existing playist id's to update user object in database
             updatedPlaylistIds = []
+            # store tracks in set to count unique number of songs
             tracks = set()
+            # iterate through playlists id's user has created
             for playlist in stats.playlists:
+                # try to fetch playlist by id, if unable to it means playlist has been deleted
                 try:
                     curr = sp.playlist(playlist)
                     playlists.append(curr)
@@ -207,14 +209,17 @@ def stats(request):
                     for track in curr["tracks"]["items"]:
                         tracks.add(track["track"]["id"])
                 except:
-                    #playlist dne remove
+                    # playlist dne remove
                     pass
+            # update db with existing playlists
             stats.playlists = updatedPlaylistIds
-            stats.save()  
+            stats.save()
+            # fill args
             args["num_songs"] = len(tracks)
             args["num_playlists"] = len(updatedPlaylistIds)
             args["playlists"] = playlists
         except User.DoesNotExist:
+            # prepare arg for html to use if user dne
             args["user_exists"] = False
         return render(request, "spotifyarchiveapp/stats.html", args)
     except:
@@ -229,7 +234,7 @@ def logout(request):
     # return to home page
     return redirect(home)
 
-
+# function to handle AJAX requests for dashboard view
 def dashboardAJAX(request, user):
     # handle AJAX search request
     if request.GET.get("action") == "search":
@@ -300,14 +305,15 @@ def dashboardAJAX(request, user):
         return JsonResponse({"playlist": recs})
     # handle AJAX playlist name change request
     if request.POST.get("action") == "playlist-name-change":
-        request.session["playlist-name"] = request.POST.get("playlistName", None)
+        request.session["playlist-name"] = request.POST.get(
+            "playlistName", None)
         return HttpResponse("")
     # handle AJAX website mode change request
     if request.POST.get("action") == "mode-change":
         request.session["mode"] = request.POST.get("mode")
         return HttpResponse("")
 
-
+# function to handle HTTP requests for dashboard view
 def dashboardHTTP(request, args):
     # handle login
     if "log-in" in request.POST:
@@ -318,7 +324,7 @@ def dashboardHTTP(request, args):
         return redirect(auth_url)
     # handle create playlist
     if "submitButton" in request.POST:
-        if "playlist-tracks" in request.session and len(request.session["playlist-tracks"]) != 0 :
+        if "playlist-tracks" in request.session and len(request.session["playlist-tracks"]) != 0:
             return redirect(success)
     # handle static search
     if "search" in request.GET:
@@ -330,6 +336,7 @@ def dashboardHTTP(request, args):
             args["search_query"] = query
         return None
 
+# function to fill args dict for dashboard view
 def dashboardFillArgs(request, user, args):
     if user is not None:
         args["display_name"] = user["display_name"]
@@ -359,16 +366,18 @@ def dashboardFillArgs(request, user, args):
                 for t in recs["tracks"]:
                     request.session["playlist-tracks"].append(t)
                 args["playlist"] = request.session["playlist-tracks"]
+    # handle website mode in args
     if "mode" in request.session:
         args["mode"] = request.session["mode"]
     else:
         args["mode"] = "static"
 
+# function to handle HTTP requests in dropdown menu
 def dropdownHTTP(request):
-    #handle dashboard
+    # handle dashboard
     if "dashboard" in request.POST:
         return redirect(dashboard)
-    #handle stats
+    # handle stats
     if "stats" in request.POST:
         return redirect(stats)
     # handle logout
@@ -376,4 +385,3 @@ def dropdownHTTP(request):
         return logout(request)
     # return None if not handling any of above requests
     return None
-    

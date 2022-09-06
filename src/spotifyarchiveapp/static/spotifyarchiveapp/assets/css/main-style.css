@@ -824,3 +824,7 @@ input[type=number] {
 #error-stats-button:hover {
     color: darkgreen;
 }
+
+#dropdown-line{
+    border-color: gray;  
+}

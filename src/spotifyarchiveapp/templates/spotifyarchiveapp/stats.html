@@ -23,7 +23,7 @@
                     {% csrf_token %}
                     <input type="submit" name="dashboard" class="dropdown-item" value="Dashboard"/>
                     <input type="submit" name="stats" class="dropdown-item" value="Stats"/>
-                    <hr style="border-color: gray;"/>
+                    <hr id="dropdown-line"/>
                     <input type="submit" name="logout" class="dropdown-item" value="Log out"/>
                 </form>
             </div>
@@ -95,7 +95,7 @@
                     <h2 class="error-stats-h2">Please create at least one playlist to view your stats!</h2>
                     <form action="#" method="post">
                         {% csrf_token %}
-                        <input id="error-stats-button" type= "submit" name="error-redirect" value="Click here to create a playlist."/>
+                        <input id="error-stats-button" type= "submit" name="dashboard-redirect" value="Click here to create a playlist."/>
                     </form>
                 </main>
             {% endif %}     
