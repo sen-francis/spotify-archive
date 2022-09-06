@@ -6,3 +6,4 @@ A Django web application that allows users to select up to five songs and then a
 ![Alt text](./screenshots/dashboard.PNG?raw=true "Dashboard Page.")
 ![Alt text](./screenshots/success.PNG?raw=true "Success Page.")
 ![Alt text](./screenshots/playlist.PNG?raw=true "Playlist on Spotify.")
+![Alt text](./screenshots/stats.PNG?raw=true "Stats Page.")
