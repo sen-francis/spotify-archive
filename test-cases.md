@@ -71,3 +71,11 @@
 ## Test Case 18
 **Test:**  Create a playlist with various tunable track attributes enabled.  
 **Expected Result:** Playlist should appear in user's Spotify library. Success page is shown.  
+
+## Test Case 19
+**Test:**  Log in as user who has previously created playlists using application and navigate to stats page.  
+**Expected Result:** User's stats should appear on page along with the previous playlists they have made.
+
+## Test Case 20
+**Test:**  Log in as user who has not used application before and navigate to stats page.  
+**Expected Result:** User should be notified that they have to use application to access stats page.  
