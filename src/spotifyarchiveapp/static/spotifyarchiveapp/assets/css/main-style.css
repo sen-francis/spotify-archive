@@ -219,11 +219,24 @@ h1 {
     z-index: 99;
 }
 
-#drop-content a {
-    color: white;
+.dropdown-item {
     text-decoration: none;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: normal;
+    text-align: left;
+    color: white;
+    background-color: #1f1f1f;
+    border: none;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    width: 100%;
     display: block;
-    padding: 0.375rem;
+    padding: 0.75rem;
+}
+
+.dropdown-item:hover {
+    background-color: #403c3c;
 }
 
 .track-list {
@@ -321,25 +334,6 @@ h1 {
     font-weight: bold;
     font-size: 2rem;
     width: 100%;
-}
-
-#logout {
-    text-decoration: none;
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: normal;
-    text-align: left;
-    color: white;
-    background-color: #1f1f1f;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    display: block;
-    padding: 0.375rem;
-}
-
-#logout:hover {
-    background-color: #403c3c;
 }
 
 .submit {
@@ -571,11 +565,11 @@ input[type=number] {
 }
 
 #playlist-name{
-    font-size: 0.9em;
+    font-size: 0.9rem;
 }
 
 #num-tracks{
-    font-size: 0.9em;
+    font-size: 0.9rem;
 }
 
 #num-tracks-form{
@@ -610,15 +604,16 @@ input[type=number] {
 }
 
 .error-h1{
-    font-size: 5em;
+    font-size: 5rem;
+    text-align: left;
 }
 
 .error-h2{
-    font-size: 3em;
+    font-size: 3rem;
 }
 
 .error-p{
-    font-size: 1.5em; 
+    font-size: 1.5rem; 
     width:50%;
 }
 
@@ -685,5 +680,151 @@ input[type=number] {
 #gen-playlist-header-div{
     display: flex;
     flex-direction: row;
-    gap: 1em;
+    gap: 1rem;
+}
+
+.stats-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    background-color: #101010;
+    font-size: 1rem;
+    color: white;
+    height: 80%;
+    width: 100%;
+    padding: 1rem;
+    font-weight: normal;
+    overflow-y: auto;
+}
+
+#stats-header {
+    display: flex;
+    flex-direction: column;
+}
+
+#stats-welcome {
+    display: flex;
+    flex-direction: row;
+}
+
+#stats-date {
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 1.25rem;
+}
+
+#songs-found{
+    font-size: 8rem;
+    font-weight: bold;
+    color: green;
+}
+
+.stats-p{
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+#stats-group{
+    display: flex;
+    flex-direction: row;
+    gap: 5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+#songs-found-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+#stats-single{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#stats-playlists{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.stat-tracklist {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1.07vh;
+}
+
+.playlist-cover{
+    width: 15rem;
+    height: 15rem;
+}
+
+.playlist-details{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.playlist-title-desc{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    margin-top: auto;
+    gap: 1rem;
+    padding-bottom: 1rem;
+}
+
+.stat-playlist{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    gap: 1rem;
+    width: 75%;
+}
+
+.playlist-title{
+    text-align: left;
+    font-size: 5rem;
+}
+
+.playlist-description{
+    font-size: 1rem;
+    color: darkgray
+}
+
+#error-stats-main{
+    gap: 20px; 
+    padding: 20px;
+}
+
+.error-stats-h1{
+    font-size: 4rem;
+    text-align: left;
+}
+
+.error-stats-h2{
+    font-size: 2rem;
+}
+
+#error-stats-button {
+    border: none;
+    font-family: Gotham;
+    font-weight: bold;
+    font-size: 2rem;
+    background-color: #101010;
+    color: green;
+    cursor: pointer;
+}
+
+#error-stats-button:hover {
+    color: darkgreen;
+}
+
+#dropdown-line{
+    border-color: gray;  
 }

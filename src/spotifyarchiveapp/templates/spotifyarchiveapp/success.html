@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link rel="stylesheet" href="{% static 'spotifyarchiveapp/assets/css/main-style.css' %}"/>
-        <script src="{% static 'spotifyarchiveapp/assets/js/success.js' %}"></script>
+        <script src="{% static 'spotifyarchiveapp/assets/js/dropdown.js' %}"></script>
         <title>Spotify Archive</title>
     </head>
     <body>
@@ -19,9 +19,12 @@
                 <p id="drop-arrow">&#9660</p>
             </div>
             <div id="drop-content">
-                <form name="logoutForm" method="POST" action="#">
+                <form name="dropdownForm" method="POST" action="#">
                     {% csrf_token %}
-                    <input type="submit" name="logout" id="logout" value="Log out"/>
+                    <input type="submit" name="dashboard" class="dropdown-item" value="Dashboard"/>
+                    <input type="submit" name="stats" class="dropdown-item" value="Stats"/>
+                    <hr id="dropdown-line"/>
+                    <input type="submit" name="logout" class="dropdown-item" value="Log out"/>
                 </form>
             </div>
         </div>
