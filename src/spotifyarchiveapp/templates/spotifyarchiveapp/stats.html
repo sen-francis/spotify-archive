@@ -28,11 +28,65 @@
                 </form>
             </div>
         </div>
-        <main class="main">
+        <main class="stats-main">
             {% if user_exists %}
-                <h1>Welcome back {{display_name}}!</h1>
-                <h2>With the help of Spotify Archive, you have discovered {{num_songs}} songs.</h2>
-                <h2>Revist your {{num_playlists}} custom playlists below.</h2>
+                <div id="stats-header">
+                    <div id="stats-welcome">
+                        <h1>Welcome back {{display_name}}!</h1>
+                    </div>
+                    <p id="stats-date">Member since {{join_date}}</p>
+                </div>
+                <div id="stats-group">
+                    <div id="stats-single">
+                        <h2 id="songs-found">{{num_songs}}</h2>
+                        <div id="songs-found-div">
+                            <p class="stats-p">Songs</p>
+                            <p class="stats-p">Discovered</p>
+                        </div>
+                    </div>
+                    <div id="stats-single">
+                        <h2 id="songs-found">{{num_playlists}}</h2>
+                        <div id="songs-found-div">
+                            <p class="stats-p">Playlists</p>
+                            <p class="stats-p">Created</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="stats-playlists">
+                    <p class="stats-p">Revist your playlists below</p>
+                    {% for playlist in playlists %}
+                        <div class="stat-playlist">
+                            <div class="playlist-details">
+                                <img class="playlist-cover" src="{{playlist.images.0.url}}"> </img>
+                                <div class="playlist-title-desc">
+                                    <h1 class="playlist-title">{{playlist.name}}</h1>
+                                    <p class="playlist-description">{{playlist.description}}</p>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class ="stat-tracklist">
+                                {% for track in playlist.tracks.items %}
+                                    <button class ="playlist-track" type="submit">
+                                        <input type="hidden" id="trackID" value="{{track.track.id}}"/>
+                                        <img class="track-img" src="{{track.track.album.images.0.url}}"/>
+                                        <div class="track-title">
+                                            <p>{{track.track.name}}</p>
+                                            <div class="track-artists">
+                                                {% for artist in track.track.artists %}
+                                                    {% if forloop.last %}
+                                                        <p>{{artist.name}}</p>
+                                                    {% else %}
+                                                        <p>{{artist.name}},&nbsp;</p>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </button>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             {% else %}
                 <h1>Hi {{display_name}}!</h1>
                 <h2>It looks like you have not created any playlists yet. Please create some to view your stats!</h2>

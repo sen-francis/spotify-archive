@@ -183,23 +183,27 @@ def stats(request):
             return http
     # needed in case user tries to access success page too early (redirects home in this case)
     try:
+        print("hi")
         # prepare args so that user icon and name is displayed in top right
         args = {}
         user = sp.current_user()
         args["display_name"] = user["display_name"]
+        print('?')
         # check if any avi exists
         if len(user["images"]) > 0:
             args["avi_url"] = user["images"][0]["url"]
         try:
+            print("hey")
             stats = User.objects.get(user_name=user["id"])
             args["user_exists"] = True
+            args["join_date"] = stats.join_date.strftime("%B %d, %Y")
             playlists = []
             updatedPlaylistIds = []
             tracks = set()
             for playlist in stats.playlists:
-                #print(playlist)
                 try:
                     curr = sp.playlist(playlist)
+                    print(curr["images"][0]["url"])
                     playlists.append(curr)
                     updatedPlaylistIds.append(playlist)
                     for track in curr["tracks"]["items"]:
@@ -207,12 +211,15 @@ def stats(request):
                 except:
                     #playlist dne remove
                     pass
+            print("lol")
             stats.playlists = updatedPlaylistIds
             stats.save()  
             args["num_songs"] = len(tracks)
             args["num_playlists"] = len(updatedPlaylistIds)
+            args["playlists"] = playlists
         except User.DoesNotExist:
             args["user_exists"] = False
+        print('here')
         return render(request, "spotifyarchiveapp/stats.html", args)
     except:
         return redirect(home)

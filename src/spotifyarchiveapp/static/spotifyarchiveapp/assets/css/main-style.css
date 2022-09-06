@@ -679,5 +679,123 @@ input[type=number] {
 #gen-playlist-header-div{
     display: flex;
     flex-direction: row;
-    gap: 1em;
+    gap: 1rem;
+}
+
+.stats-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    background-color: #101010;
+    font-size: 1rem;
+    color: white;
+    height: 80%;
+    width: 100%;
+    padding: 1rem;
+    font-weight: normal;
+    overflow-y: auto;
+}
+
+#stats-header {
+    display: flex;
+    flex-direction: column;
+}
+
+#stats-welcome {
+    display: flex;
+    flex-direction: row;
+}
+
+#user-name{
+    color: green;
+}
+
+#stats-date {
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 1.25rem;
+}
+
+#songs-found{
+    font-size: 8rem;
+    font-weight: bold;
+    color: green;
+}
+
+.stats-p{
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+#stats-group{
+    display: flex;
+    flex-direction: row;
+    gap: 5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+#songs-found-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+}
+
+#stats-single{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#stats-playlists{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.stat-tracklist {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1.07vh;
+}
+
+.playlist-cover{
+    width: 15rem;
+    height: 15rem;
+}
+
+.playlist-details{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.playlist-title-desc{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    margin-top: auto;
+    gap: 1rem;
+    padding-bottom: 1rem;
+}
+
+.stat-playlist{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    gap: 1rem;
+    width: 75%;
+}
+
+.playlist-title{
+    text-align: left;
+    font-size: 5rem;
+}
+
+.playlist-description{
+    font-size: 1rem;
+    color: darkgray
 }
