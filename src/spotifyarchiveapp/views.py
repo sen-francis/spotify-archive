@@ -7,14 +7,16 @@ import os
 from .models import User
 import datetime
 
+# define global vars
+SPOTIPY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
+SPOTIPY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
+SPOTIPY_REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
+SCOPE = "user-read-private playlist-modify-private"
+CACHE = ".spotipyoauthcache"
+
 # configure Spotipy API for either client credentials or authorization depending on flow
 def initSpotipy(flow):
-    SPOTIPY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
-    SPOTIPY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
     if flow == "authorization":
-        SPOTIPY_REDIRECT_URI = os.environ.get("SPOTIFY_REDIRECT_URI")
-        SCOPE = "user-read-private playlist-modify-private"
-        CACHE = ".spotipyoauthcache"
         global sp_oauth
         sp_oauth = oauth2.SpotifyOAuth(
             client_id=SPOTIPY_CLIENT_ID,
@@ -84,14 +86,29 @@ def dashboard(request):
     # handle non-login case
     if "fake_login" in request.session:
         args["fake_login"] = True
+        client = SpotifyClientCredentials(
+            client_id=SPOTIPY_CLIENT_ID, client_secret=SPOTIPY_CLIENT_SECRET
+        )
         sp = spotipy.Spotify(auth_manager=client)
+        
     else:
         # handle login cases
-        if request.GET.get("code"):
-            sp_oauth.get_access_token(request.GET.get("code"))
-            sp = spotipy.Spotify(auth_manager=sp_oauth)
-        else:
-            sp = spotipy.Spotify(auth_manager=sp_oauth)
+        sp_oauth = oauth2.SpotifyOAuth(
+            client_id=SPOTIPY_CLIENT_ID,
+            client_secret=SPOTIPY_CLIENT_SECRET,
+            redirect_uri=SPOTIPY_REDIRECT_URI,
+            scope=SCOPE,
+            cache_path=CACHE,
+            show_dialog=True,
+        )
+        # get cached token if exists
+        token_info = sp_oauth.get_cached_token()
+        # look for token in url
+        if not token_info:
+            code = sp_oauth.parse_response_code(request.build_absolute_uri())
+            token_info = sp_oauth.get_access_token(code)    
+        token = token_info['access_token']
+        sp = spotipy.Spotify(token)
     user = None
     if "fake_login" not in request.session:
         # get user info
